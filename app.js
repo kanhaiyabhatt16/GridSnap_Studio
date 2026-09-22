@@ -437,16 +437,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Batch & Single Image Upload Handler
   function handleBatchFiles(files, startSlotIdx = 0, replaceSingleSlot = false) {
-    const imageFiles = files.filter(f => f.type.startsWith('image/'));
+    const fileList = Array.from(files);
+    const imageFiles = fileList.filter(f => 
+      (f.type && f.type.startsWith('image/')) || 
+      /\.(jpg|jpeg|png|webp|gif|bmp|svg|jfif|avif)$/i.test(f.name)
+    );
     if (imageFiles.length === 0) return;
 
     const isDuplicateAll = slotReplaceInput.getAttribute('data-duplicate-all') === 'true';
     slotReplaceInput.removeAttribute('data-duplicate-all');
 
-    if (replaceSingleSlot) {
-      const targetIdx = startSlotIdx;
-      if (targetIdx < 0 || targetIdx >= state.slots.length) return;
-
+    // Case 1: Explicit Duplicate to All Flag (Passport duplication)
+    if (isDuplicateAll) {
+      const targetIdx = startSlotIdx >= 0 && startSlotIdx < state.slots.length ? startSlotIdx : 0;
       const file = imageFiles[0];
       const url = URL.createObjectURL(file);
       const img = new Image();
@@ -465,46 +468,102 @@ document.addEventListener('DOMContentLoaded', () => {
           flipH: false,
           fitMode: 'fill'
         };
-
-        if (isDuplicateAll) {
-          duplicateToAllSlots(targetIdx);
-        } else {
-          renderGridSlots();
-          selectSlot(targetIdx);
-        }
+        duplicateToAllSlots(targetIdx);
       };
       img.src = url;
-    } else {
-      let targetIdx = startSlotIdx;
-
-      imageFiles.forEach((file) => {
-        while (targetIdx < state.slots.length && state.slots[targetIdx].url !== null) {
-          targetIdx++;
-        }
-        if (targetIdx >= state.slots.length) return;
-
-        const currentSlotIdx = targetIdx;
-        const url = URL.createObjectURL(file);
-        const img = new Image();
-        img.onload = () => {
-          state.slots[currentSlotIdx] = {
-            img: img,
-            url: url,
-            isUserBlob: true,
-            zoom: 1.0,
-            panX: 0,
-            panY: 0,
-            rotation: 0,
-            flipH: false,
-            fitMode: 'fill'
-          };
-          renderGridSlots();
-        };
-        img.src = url;
-
-        targetIdx++;
-      });
+      return;
     }
+
+    // Case 2: Replace ONLY a single specific slot when replacing single slot
+    if (replaceSingleSlot && imageFiles.length === 1) {
+      const targetIdx = startSlotIdx >= 0 && startSlotIdx < state.slots.length ? startSlotIdx : 0;
+      const file = imageFiles[0];
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        if (state.slots[targetIdx] && state.slots[targetIdx].isUserBlob && state.slots[targetIdx].url) {
+          URL.revokeObjectURL(state.slots[targetIdx].url);
+        }
+        state.slots[targetIdx] = {
+          img: img,
+          url: url,
+          isUserBlob: true,
+          zoom: 1.0,
+          panX: 0,
+          panY: 0,
+          rotation: 0,
+          flipH: false,
+          fitMode: 'fill'
+        };
+        renderGridSlots();
+        selectSlot(targetIdx);
+      };
+      img.src = url;
+      return;
+    }
+
+    // Case 3: Batch Upload mode (replaceSingleSlot === false) with ONLY 1 photo -> Fill ALL slots
+    if (!replaceSingleSlot && imageFiles.length === 1) {
+      const file = imageFiles[0];
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        const singleSlotData = {
+          img: img,
+          url: url,
+          isUserBlob: true,
+          zoom: 1.0,
+          panX: 0,
+          panY: 0,
+          rotation: 0,
+          flipH: false,
+          fitMode: 'fill'
+        };
+
+        for (let i = 0; i < state.slots.length; i++) {
+          if (state.slots[i] && state.slots[i].isUserBlob && state.slots[i].url && state.slots[i].url !== url) {
+            URL.revokeObjectURL(state.slots[i].url);
+          }
+          state.slots[i] = { ...singleSlotData };
+        }
+
+        renderGridSlots();
+        selectSlot(startSlotIdx >= 0 && startSlotIdx < state.slots.length ? startSlotIdx : 0);
+      };
+      img.src = url;
+      return;
+    }
+
+    // Case 4: Multiple files upload (>1) -> Fill slots sequentially starting from startSlotIdx
+    let currentTargetIdx = startSlotIdx >= 0 && startSlotIdx < state.slots.length ? startSlotIdx : 0;
+
+    imageFiles.forEach((file) => {
+      if (currentTargetIdx >= state.slots.length) return;
+
+      const slotIdxToFill = currentTargetIdx;
+      currentTargetIdx++;
+
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        if (state.slots[slotIdxToFill] && state.slots[slotIdxToFill].isUserBlob && state.slots[slotIdxToFill].url) {
+          URL.revokeObjectURL(state.slots[slotIdxToFill].url);
+        }
+        state.slots[slotIdxToFill] = {
+          img: img,
+          url: url,
+          isUserBlob: true,
+          zoom: 1.0,
+          panX: 0,
+          panY: 0,
+          rotation: 0,
+          flipH: false,
+          fitMode: 'fill'
+        };
+        renderGridSlots();
+      };
+      img.src = url;
+    });
   }
 
   // Load High-Quality Sample Images
@@ -959,8 +1018,14 @@ document.addEventListener('DOMContentLoaded', () => {
           drawImageOnCanvas(slotData.img);
         } else {
           const img = new Image();
-          img.crossOrigin = 'anonymous';
+          if (slotData.url && (slotData.url.startsWith('http://') || slotData.url.startsWith('https://'))) {
+            img.crossOrigin = 'anonymous';
+          }
           img.onload = () => drawImageOnCanvas(img);
+          img.onerror = () => {
+            loadedCount++;
+            if (loadedCount === totalSlots && callback) callback();
+          };
           img.src = slotData.url;
         }
       } else {
