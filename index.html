@@ -2648,7 +2648,7 @@
               }
 
               tabBtns.forEach(btn => btn.addEventListener('click', (e) => {
-                if (btn.id === 'btn-toggle-sidebar-collapse') return;
+                if (btn.id === 'btn-toggle-sidebar-collapse' || btn.id === 'btn-tab-export') return;
                 const isMobile = window.innerWidth <= 840;
                 const targetTab = btn.dataset.tab;
                 const isActive = btn.classList.contains('active');
@@ -2823,7 +2823,13 @@
               const btnTabExport = document.getElementById('btn-tab-export');
 
               if (btnTabExport) {
-                btnTabExport.addEventListener('click', () => {
+                btnTabExport.addEventListener('click', (e) => {
+                  e.stopPropagation();
+                  if (window.innerWidth <= 840 && sidebarEl && sidebarEl.classList.contains('mobile-expanded')) {
+                    sidebarEl.classList.remove('mobile-expanded');
+                    sidebarEl.classList.add('mobile-collapsed');
+                    setTimeout(updateFrameStyles, 320);
+                  }
                   if (exportModal) {
                     exportModal.classList.remove('hidden');
                     renderExportCanvasPreview();
