@@ -282,6 +282,10 @@ body {
   padding: 20px;
 }
 
+.btn-tab-export {
+  display: none !important;
+}
+
 .tab-panel {
   display: none;
   flex-direction: column;
@@ -1202,6 +1206,13 @@ body {
 
   .sidebar.mobile-expanded .tab-contents {
     display: flex !important;
+  }
+
+  .btn-tab-export {
+    display: flex !important;
+    background-color: rgba(99, 102, 241, 0.12);
+    color: var(--primary);
+    font-weight: 700;
   }
 
   .mobile-drawer-header {

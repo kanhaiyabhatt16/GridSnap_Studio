@@ -293,6 +293,11 @@
       background-color: rgba(99, 102, 241, 0.08);
     }
 
+    /* Export tab button hidden on desktop by default */
+    .btn-tab-export {
+      display: none !important;
+    }
+
     .tab-contents {
       flex: 1;
       overflow-y: auto;
@@ -1272,6 +1277,13 @@
         gap: 2px;
       }
 
+      .btn-tab-export {
+        display: flex !important;
+        background-color: rgba(99, 102, 241, 0.12);
+        color: var(--primary);
+        font-weight: 700;
+      }
+
       .tab-contents {
         flex: 1;
         overflow-y: auto;
@@ -1400,6 +1412,12 @@
               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
             </svg>
             <span>Image</span>
+          </button>
+          <button class="tab-btn btn-tab-export" id="btn-tab-export" title="Export high-res collage options">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 3v12m0 0l-4-4m4 4l4-4M3 21h18" />
+            </svg>
+            <span>Export</span>
           </button>
         </nav>
 
@@ -2801,6 +2819,17 @@
                 exportModal.classList.remove('hidden');
                 renderExportCanvasPreview();
               });
+
+              const btnTabExport = document.getElementById('btn-tab-export');
+
+              if (btnTabExport) {
+                btnTabExport.addEventListener('click', () => {
+                  if (exportModal) {
+                    exportModal.classList.remove('hidden');
+                    renderExportCanvasPreview();
+                  }
+                });
+              }
 
               btnCloseModal.addEventListener('click', () => exportModal.classList.add('hidden'));
               btnCancelExport.addEventListener('click', () => exportModal.classList.add('hidden'));
