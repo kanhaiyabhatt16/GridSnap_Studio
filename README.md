@@ -1,1 +1,0 @@
-# GridSnap_Studio

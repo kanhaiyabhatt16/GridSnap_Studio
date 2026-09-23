@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GridSnap - 4-Way Resizable Photo Collage Studio</title>
-  <meta name="description" content="High-performance client-side photo collage studio with 8-way interactive handles, 4-side padding, and 300 DPI A4 export.">
-  
+  <meta name="description"
+    content="High-performance client-side photo collage studio with 8-way interactive handles, 4-side padding, and 300 DPI A4 export.">
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
   <style>
     /* ==========================================================================
        GridSnap Design System & UI Styles
@@ -21,16 +24,16 @@
       --bg-panel: #1e293b;
       --bg-panel-hover: #334155;
       --border-color: rgba(255, 255, 255, 0.08);
-      
+
       --primary: #6366f1;
       --primary-hover: #4f46e5;
       --primary-light: rgba(99, 102, 241, 0.15);
       --accent: #8b5cf6;
-      
+
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
-      
+
       --danger: #ef4444;
 
       /* Collage Frame Dynamic CSS Vars */
@@ -370,17 +373,57 @@
       background-color: var(--primary);
     }
 
-    .preview-1x4 { grid-template-columns: repeat(4, 1fr); grid-template-rows: 1fr; }
-    .preview-2x2 { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); }
-    .preview-2x3 { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 1fr); }
-    .preview-2x4 { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr); }
-    .preview-2x5 { grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(2, 1fr); }
-    .preview-3x3 { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); }
-    .preview-3x4 { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, 1fr); }
-    .preview-5x6 { grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(6, 1fr); }
-    .preview-6x7 { grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(7, 1fr); }
-    .preview-5x5 { display: flex; align-items: center; justify-content: center; }
-    
+    .preview-1x4 {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 1fr;
+    }
+
+    .preview-2x2 {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+    }
+
+    .preview-2x3 {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+    }
+
+    .preview-2x4 {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+    }
+
+    .preview-2x5 {
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+    }
+
+    .preview-3x3 {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+    }
+
+    .preview-3x4 {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+    }
+
+    .preview-5x6 {
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+    }
+
+    .preview-6x7 {
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(7, 1fr);
+    }
+
+    .preview-5x5 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .grid-mini-dots {
       width: 100%;
       height: 100%;
@@ -489,13 +532,15 @@
     }
 
     /* Color Swatches */
-    .color-swatches, .gradient-swatches {
+    .color-swatches,
+    .gradient-swatches {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
     }
 
-    .swatch, .gradient-swatch {
+    .swatch,
+    .gradient-swatch {
       height: 38px;
       border-radius: 8px;
       border: 2px solid transparent;
@@ -504,11 +549,13 @@
       position: relative;
     }
 
-    .swatch:hover, .gradient-swatch:hover {
+    .swatch:hover,
+    .gradient-swatch:hover {
       transform: scale(1.05);
     }
 
-    .swatch.active, .gradient-swatch.active {
+    .swatch.active,
+    .gradient-swatch.active {
       border-color: var(--primary);
       box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.4);
     }
@@ -632,7 +679,16 @@
       justify-content: center;
       position: relative;
       overflow: auto;
-      padding: 48px;
+      padding: 32px;
+    }
+
+    .canvas-scale-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+      flex-shrink: 0;
     }
 
     /* Live Dimension Floating Tooltip */
@@ -648,7 +704,7 @@
       font-weight: 700;
       padding: 4px 14px;
       border-radius: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
       white-space: nowrap;
       pointer-events: none;
       z-index: 40;
@@ -660,14 +716,16 @@
 
     /* Interactive Resizable Outer Wrapper */
     .resizable-wrapper {
-      position: relative;
+      position: absolute;
+      top: 0;
+      left: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       width: var(--frame-width, 680px);
       height: var(--frame-height, 840px);
       transition: box-shadow 0.2s ease;
-      margin: auto;
+      transform-origin: top left;
     }
 
     /* Collage CSS Grid Frame Container */
@@ -696,12 +754,13 @@
       background-color: var(--primary);
       border: 2.5px solid #ffffff;
       border-radius: 50%;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
       z-index: 35;
       transition: transform 0.15s ease, background-color 0.15s ease;
     }
 
-    .handle:hover, .handle.dragging {
+    .handle:hover,
+    .handle.dragging {
       transform: scale(1.35);
       background-color: var(--accent);
       box-shadow: 0 0 12px var(--primary);
@@ -716,7 +775,11 @@
       width: 32px;
       border-radius: 6px;
     }
-    .handle-top:hover, .handle-top.dragging { transform: translateX(-50%) scale(1.2); }
+
+    .handle-top:hover,
+    .handle-top.dragging {
+      transform: translateX(-50%) scale(1.2);
+    }
 
     .handle-bottom {
       bottom: -7px;
@@ -726,7 +789,11 @@
       width: 32px;
       border-radius: 6px;
     }
-    .handle-bottom:hover, .handle-bottom.dragging { transform: translateX(-50%) scale(1.2); }
+
+    .handle-bottom:hover,
+    .handle-bottom.dragging {
+      transform: translateX(-50%) scale(1.2);
+    }
 
     .handle-left {
       left: -7px;
@@ -736,7 +803,11 @@
       height: 32px;
       border-radius: 6px;
     }
-    .handle-left:hover, .handle-left.dragging { transform: translateY(-50%) scale(1.2); }
+
+    .handle-left:hover,
+    .handle-left.dragging {
+      transform: translateY(-50%) scale(1.2);
+    }
 
     .handle-right {
       right: -7px;
@@ -746,25 +817,87 @@
       height: 32px;
       border-radius: 6px;
     }
-    .handle-right:hover, .handle-right.dragging { transform: translateY(-50%) scale(1.2); }
+
+    .handle-right:hover,
+    .handle-right.dragging {
+      transform: translateY(-50%) scale(1.2);
+    }
 
     /* 4 Corner Handles */
-    .handle-top-left { top: -7px; left: -7px; cursor: nwse-resize; }
-    .handle-top-right { top: -7px; right: -7px; cursor: nesw-resize; }
-    .handle-bottom-left { bottom: -7px; left: -7px; cursor: nesw-resize; }
-    .handle-bottom-right { bottom: -7px; right: -7px; cursor: nwse-resize; }
+    .handle-top-left {
+      top: -7px;
+      left: -7px;
+      cursor: nwse-resize;
+    }
+
+    .handle-top-right {
+      top: -7px;
+      right: -7px;
+      cursor: nesw-resize;
+    }
+
+    .handle-bottom-left {
+      bottom: -7px;
+      left: -7px;
+      cursor: nesw-resize;
+    }
+
+    .handle-bottom-right {
+      bottom: -7px;
+      right: -7px;
+      cursor: nwse-resize;
+    }
 
     /* Grid Layout Matrix Rules */
-    .grid-1x4 { grid-template-columns: repeat(4, 1fr); grid-template-rows: 1fr; }
-    .grid-2x2 { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); }
-    .grid-2x3 { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 1fr); }
-    .grid-2x4 { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr); }
-    .grid-2x5 { grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(2, 1fr); }
-    .grid-3x3 { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); }
-    .grid-3x4 { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, 1fr); }
-    .grid-5x5 { grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr); }
-    .grid-5x6 { grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(6, 1fr); }
-    .grid-6x7 { grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(7, 1fr); }
+    .grid-1x4 {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 1fr;
+    }
+
+    .grid-2x2 {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+    }
+
+    .grid-2x3 {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+    }
+
+    .grid-2x4 {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+    }
+
+    .grid-2x5 {
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+    }
+
+    .grid-3x3 {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+    }
+
+    .grid-3x4 {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+    }
+
+    .grid-5x5 {
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+    }
+
+    .grid-5x6 {
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+    }
+
+    .grid-6x7 {
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(7, 1fr);
+    }
 
     /* Collage Grid Cell Slot */
     .slot {
@@ -804,7 +937,7 @@
       padding: 2px 8px;
       border-radius: 4px;
       letter-spacing: 0.05em;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
       pointer-events: none;
       z-index: 12;
     }
@@ -863,11 +996,21 @@
       transition: transform 0.05s linear;
     }
 
-    .slot img.fit-fill { object-fit: fill; }
-    .slot img.fit-cover { object-fit: cover; }
-    .slot img.fit-contain { object-fit: contain; }
+    .slot img.fit-fill {
+      object-fit: fill;
+    }
 
-    .slot img:active { cursor: grabbing; }
+    .slot img.fit-cover {
+      object-fit: cover;
+    }
+
+    .slot img.fit-contain {
+      object-fit: contain;
+    }
+
+    .slot img:active {
+      cursor: grabbing;
+    }
 
     /* Overlay Action Buttons */
     .slot-actions-overlay {
@@ -881,7 +1024,10 @@
       z-index: 15;
     }
 
-    .slot:hover .slot-actions-overlay, .slot.selected .slot-actions-overlay { opacity: 1; }
+    .slot:hover .slot-actions-overlay,
+    .slot.selected .slot-actions-overlay {
+      opacity: 1;
+    }
 
     .slot-action-btn {
       width: 26px;
@@ -897,8 +1043,13 @@
       cursor: pointer;
     }
 
-    .slot-action-btn:hover { background: var(--primary); }
-    .slot-action-btn.delete:hover { background: var(--danger); }
+    .slot-action-btn:hover {
+      background: var(--primary);
+    }
+
+    .slot-action-btn.delete:hover {
+      background: var(--danger);
+    }
 
     /* Workspace Bar */
     .workspace-bar {
@@ -916,7 +1067,10 @@
       color: var(--text-muted);
     }
 
-    .info-badge { font-weight: 700; color: var(--text-main); }
+    .info-badge {
+      font-weight: 700;
+      color: var(--text-main);
+    }
 
     /* Modal System */
     .modal-backdrop {
@@ -950,7 +1104,10 @@
       justify-content: space-between;
     }
 
-    .modal-header h3 { font-size: 1.1rem; font-weight: 700; }
+    .modal-header h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
 
     .modal-body {
       padding: 24px;
@@ -986,28 +1143,143 @@
       line-height: 1.3;
     }
 
-    /* Responsive Layout Adjustments */
+    /* Footer Component */
+    .app-footer {
+      width: 100%;
+      background-color: var(--bg-surface);
+      border-top: 1px solid var(--border-color);
+      padding: 14px 24px;
+      z-index: 50;
+      flex-shrink: 0;
+    }
+
+    .footer-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1400px;
+      margin: 0 auto;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .footer-brand {
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .footer-credit strong {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* Responsive Layout Adjustments (Mobile Bottom Controls Look) */
     @media (max-width: 840px) {
-      .workspace-layout {
-        flex-direction: column-reverse;
+      .app-container {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
       }
 
-      .sidebar {
-        width: 100%;
-        height: 340px;
+      .app-header {
+        height: 52px;
+        padding: 0 12px;
+        flex-shrink: 0;
       }
 
-      .canvas-workspace {
-        padding: 12px;
-        flex: 1;
+      .brand {
+        font-size: 1rem;
       }
 
       .tagline {
         display: none;
       }
+
+      .header-actions {
+        gap: 6px;
+      }
+
+      .header-actions .btn {
+        height: 36px;
+        padding: 0 10px;
+        font-size: 0.8rem;
+      }
+
+      .workspace-layout {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .canvas-workspace {
+        flex: 1;
+        width: 100%;
+        padding: 16px 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: 320px;
+        max-height: 48vh;
+        background-color: var(--bg-surface);
+        border-top: 1px solid var(--border-color);
+        border-right: none;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        z-index: 30;
+        box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.4);
+      }
+
+      .sidebar-tabs {
+        height: 50px;
+        flex-shrink: 0;
+        background-color: rgba(11, 15, 25, 0.85);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+      }
+
+      .tab-btn {
+        flex: 1;
+        height: 100%;
+        font-size: 0.74rem;
+        gap: 2px;
+      }
+
+      .tab-contents {
+        flex: 1;
+        overflow-y: auto;
+        padding: 14px;
+      }
+
+      .app-footer {
+        padding: 8px 14px;
+        font-size: 0.74rem;
+        background-color: var(--bg-dark);
+        border-top: 1px solid var(--border-color);
+        flex-shrink: 0;
+      }
+
+      .footer-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.74rem;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="app-container">
     <!-- Top Navigation Header -->
@@ -1028,17 +1300,21 @@
       </div>
 
       <div class="header-actions">
-        <label for="batch-upload-input" class="btn btn-secondary" title="Upload multiple photos at once" style="position: relative; overflow: hidden; cursor: pointer;">
+        <label for="batch-upload-input" class="btn btn-secondary" title="Upload multiple photos at once"
+          style="position: relative; overflow: hidden; cursor: pointer;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="17 8 12 3 7 8"/>
-            <line x1="12" y1="3" x2="12" y2="15"/>
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
           </svg>
           <span>Batch Upload</span>
-          <input type="file" id="batch-upload-input" multiple accept="image/*,.jpg,.jpeg,.png,.webp,.gif,.bmp,.svg,.jfif,.avif" style="position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 10;">
+          <input type="file" id="batch-upload-input" multiple
+            accept="image/*,.jpg,.jpeg,.png,.webp,.gif,.bmp,.svg,.jfif,.avif"
+            style="position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 10;">
         </label>
 
-        <button id="btn-duplicate-all-header" class="btn btn-secondary" title="Duplicate selected photo to all slots (Passport Mode)">
+        <button id="btn-duplicate-all-header" class="btn btn-secondary"
+          title="Duplicate selected photo to all slots (Passport Mode)">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="9" y="9" width="13" height="13" rx="2"></rect>
             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -1048,23 +1324,24 @@
 
         <button id="btn-sample-photos" class="btn btn-ghost" title="Load sample photos">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            <path
+              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
           <span>Sample Photos</span>
         </button>
 
         <button id="btn-quick-download" class="btn btn-secondary" title="Instant 1-Click Download">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
           </svg>
           <span>Quick Download</span>
         </button>
 
         <button id="btn-open-export" class="btn btn-primary" title="Export high-res collage options">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 3v12m0 0l-4-4m4 4l4-4M3 21h18"/>
+            <path d="M12 3v12m0 0l-4-4m4 4l4-4M3 21h18" />
           </svg>
           <span>Export Options</span>
         </button>
@@ -1115,7 +1392,7 @@
           <section id="tab-layout" class="tab-panel active">
             <h3 class="panel-title">Grid Layouts (Ascending Series)</h3>
             <p class="panel-subtitle">Select layout pattern from 4 to 25 photo slots</p>
-            
+
             <div class="grid-presets">
               <button class="preset-card active" data-grid="1x4">
                 <div class="preset-preview preview-1x4">
@@ -1202,13 +1479,16 @@
           <section id="tab-frame" class="tab-panel">
             <h3 class="panel-title">4-Way Stretch & Independent Padding</h3>
             <p class="panel-subtitle">Drag 8 handles on canvas or adjust 4-sided padding below</p>
-            
+
             <div class="control-group">
               <label class="control-label">Default Photo Fit Mode (No Cut vs Crop)</label>
               <div class="pill-group" id="global-fit-mode-group">
-                <button class="pill-btn" data-fit="contain" title="Show 100% complete photo (No cut/crop)">🖼️ Full Photo (Contain)</button>
-                <button class="pill-btn" data-fit="cover" title="Crop overflow to fill cell">✂️ Crop Fill (Cover)</button>
-                <button class="pill-btn active" data-fit="fill" title="Stretch to fill cell">📐 Stretch Fit (Fill)</button>
+                <button class="pill-btn" data-fit="contain" title="Show 100% complete photo (No cut/crop)">🖼️ Full
+                  Photo (Contain)</button>
+                <button class="pill-btn" data-fit="cover" title="Crop overflow to fill cell">✂️ Crop Fill
+                  (Cover)</button>
+                <button class="pill-btn active" data-fit="fill" title="Stretch to fill cell">📐 Stretch Fit
+                  (Fill)</button>
               </div>
             </div>
 
@@ -1246,19 +1526,23 @@
               <label class="control-label">4-Way Independent Outer Padding</label>
               <div class="padding-matrix-grid">
                 <div>
-                  <div class="control-label-row"><span>Top</span><span class="value-badge" id="pad-top-val">4px</span></div>
+                  <div class="control-label-row"><span>Top</span><span class="value-badge" id="pad-top-val">4px</span>
+                  </div>
                   <input type="range" id="input-pad-top" min="0" max="60" value="4" class="range-slider">
                 </div>
                 <div>
-                  <div class="control-label-row"><span>Right</span><span class="value-badge" id="pad-right-val">4px</span></div>
+                  <div class="control-label-row"><span>Right</span><span class="value-badge"
+                      id="pad-right-val">4px</span></div>
                   <input type="range" id="input-pad-right" min="0" max="60" value="4" class="range-slider">
                 </div>
                 <div>
-                  <div class="control-label-row"><span>Bottom</span><span class="value-badge" id="pad-bottom-val">4px</span></div>
+                  <div class="control-label-row"><span>Bottom</span><span class="value-badge"
+                      id="pad-bottom-val">4px</span></div>
                   <input type="range" id="input-pad-bottom" min="0" max="60" value="4" class="range-slider">
                 </div>
                 <div>
-                  <div class="control-label-row"><span>Left</span><span class="value-badge" id="pad-left-val">4px</span></div>
+                  <div class="control-label-row"><span>Left</span><span class="value-badge" id="pad-left-val">4px</span>
+                  </div>
                   <input type="range" id="input-pad-left" min="0" max="60" value="4" class="range-slider">
                 </div>
               </div>
@@ -1276,18 +1560,25 @@
           <!-- 3. Background Color Tab -->
           <section id="tab-background" class="tab-panel">
             <h3 class="panel-title">Background Style</h3>
-            
+
             <div class="control-group">
               <label class="control-label">Color Presets</label>
               <div class="color-swatches" id="color-swatches">
-                <button class="swatch active" data-color="#808080" style="background-color: #808080;" title="Neutral Grey"></button>
+                <button class="swatch active" data-color="#808080" style="background-color: #808080;"
+                  title="Neutral Grey"></button>
                 <button class="swatch" data-color="#ffffff" style="background-color: #ffffff;" title="White"></button>
-                <button class="swatch" data-color="#0f172a" style="background-color: #0f172a;" title="Dark Slate"></button>
-                <button class="swatch" data-color="#000000" style="background-color: #000000;" title="Pure Black"></button>
-                <button class="swatch" data-color="#f1f5f9" style="background-color: #f1f5f9;" title="Soft Gray"></button>
-                <button class="swatch" data-color="#fdf4ff" style="background-color: #fdf4ff;" title="Pastel Pink"></button>
-                <button class="swatch" data-color="#f0fdf4" style="background-color: #f0fdf4;" title="Mint Green"></button>
-                <button class="swatch" data-color="#eff6ff" style="background-color: #eff6ff;" title="Soft Blue"></button>
+                <button class="swatch" data-color="#0f172a" style="background-color: #0f172a;"
+                  title="Dark Slate"></button>
+                <button class="swatch" data-color="#000000" style="background-color: #000000;"
+                  title="Pure Black"></button>
+                <button class="swatch" data-color="#f1f5f9" style="background-color: #f1f5f9;"
+                  title="Soft Gray"></button>
+                <button class="swatch" data-color="#fdf4ff" style="background-color: #fdf4ff;"
+                  title="Pastel Pink"></button>
+                <button class="swatch" data-color="#f0fdf4" style="background-color: #f0fdf4;"
+                  title="Mint Green"></button>
+                <button class="swatch" data-color="#eff6ff" style="background-color: #eff6ff;"
+                  title="Soft Blue"></button>
                 <button class="swatch swatch-transparent" data-color="transparent" title="Transparent Canvas"></button>
               </div>
             </div>
@@ -1306,8 +1597,8 @@
             <h3 class="panel-title">Slot Fine-Tuning</h3>
             <div id="no-slot-selected" class="empty-selection-msg">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="4 4"/>
-                <path d="M12 8v8m-4-4h8"/>
+                <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="4 4" />
+                <path d="M12 8v8m-4-4h8" />
               </svg>
               <p>Click on any photo slot to fine-tune zoom, pan, fit mode, or replace its image.</p>
             </div>
@@ -1323,8 +1614,10 @@
                   <span>Image Fit Mode</span>
                 </div>
                 <div class="pill-group" id="slot-fit-mode-group">
-                  <button class="pill-btn active" data-fit="fill" title="Fit to exact slot size (stretch fill)">Fill (Exact Fit)</button>
-                  <button class="pill-btn" data-fit="cover" title="Cover cell (crop overflow, zero distortion)">Cover (Crop Fill)</button>
+                  <button class="pill-btn active" data-fit="fill" title="Fit to exact slot size (stretch fill)">Fill
+                    (Exact Fit)</button>
+                  <button class="pill-btn" data-fit="cover" title="Cover cell (crop overflow, zero distortion)">Cover
+                    (Crop Fill)</button>
                   <button class="pill-btn" data-fit="contain" title="Show full photo (letterbox)">Contain</button>
                 </div>
               </div>
@@ -1378,14 +1671,17 @@
 
               <div class="control-group">
                 <label class="control-label">Replace Image</label>
-                <label for="slot-replace-input" class="btn btn-secondary btn-full" style="position: relative; overflow: hidden; cursor: pointer;">
+                <label for="slot-replace-input" class="btn btn-secondary btn-full"
+                  style="position: relative; overflow: hidden; cursor: pointer;">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="17 8 12 3 7 8"/>
-                    <line x1="12" y1="3" x2="12" y2="15"/>
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
                   </svg>
                   <span>Choose New Image</span>
-                  <input type="file" id="slot-replace-input" multiple accept="image/*,.jpg,.jpeg,.png,.webp,.gif,.bmp,.svg,.jfif,.avif" style="position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 10;">
+                  <input type="file" id="slot-replace-input" multiple
+                    accept="image/*,.jpg,.jpeg,.png,.webp,.gif,.bmp,.svg,.jfif,.avif"
+                    style="position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 10;">
                 </label>
               </div>
             </div>
@@ -1395,26 +1691,28 @@
 
       <!-- Center Interactive 8-Handle Resizable Canvas Workspace -->
       <section class="canvas-workspace">
-        <div id="resizable-wrapper" class="resizable-wrapper">
-          <!-- Live Dimension Tooltip Badge -->
-          <div class="dimension-tooltip-badge" id="dimension-tooltip">
-            Width: <span id="dim-w">840</span>px | Height: <span id="dim-h">600</span>px
-          </div>
+        <div id="canvas-scale-container" class="canvas-scale-container">
+          <div id="resizable-wrapper" class="resizable-wrapper">
+            <!-- Live Dimension Tooltip Badge -->
+            <div class="dimension-tooltip-badge" id="dimension-tooltip">
+              Width: <span id="dim-w">840</span>px | Height: <span id="dim-h">600</span>px
+            </div>
 
-          <!-- 8 Interactive Draggable Handles -->
-          <div class="handle handle-top" data-handle="top" title="Drag to stretch/compact top"></div>
-          <div class="handle handle-bottom" data-handle="bottom" title="Drag to stretch/compact bottom"></div>
-          <div class="handle handle-left" data-handle="left" title="Drag to stretch/compact left"></div>
-          <div class="handle handle-right" data-handle="right" title="Drag to stretch/compact right"></div>
-          
-          <div class="handle handle-top-left" data-handle="top-left" title="Drag corner"></div>
-          <div class="handle handle-top-right" data-handle="top-right" title="Drag corner"></div>
-          <div class="handle handle-bottom-left" data-handle="bottom-left" title="Drag corner"></div>
-          <div class="handle handle-bottom-right" data-handle="bottom-right" title="Drag corner"></div>
+            <!-- 8 Interactive Draggable Handles -->
+            <div class="handle handle-top" data-handle="top" title="Drag to stretch/compact top"></div>
+            <div class="handle handle-bottom" data-handle="bottom" title="Drag to stretch/compact bottom"></div>
+            <div class="handle handle-left" data-handle="left" title="Drag to stretch/compact left"></div>
+            <div class="handle handle-right" data-handle="right" title="Drag to stretch/compact right"></div>
 
-          <!-- Collage Frame -->
-          <div id="collage-frame" class="collage-frame grid-2x4">
-            <!-- Dynamic Slots Injected by JS -->
+            <div class="handle handle-top-left" data-handle="top-left" title="Drag corner"></div>
+            <div class="handle handle-top-right" data-handle="top-right" title="Drag corner"></div>
+            <div class="handle handle-bottom-left" data-handle="bottom-left" title="Drag corner"></div>
+            <div class="handle handle-bottom-right" data-handle="bottom-right" title="Drag corner"></div>
+
+            <!-- Collage Frame -->
+            <div id="collage-frame" class="collage-frame grid-2x4">
+              <!-- Dynamic Slots Injected by JS -->
+            </div>
           </div>
         </div>
 
@@ -1428,6 +1726,21 @@
         </div>
       </section>
     </main>
+
+    <!-- Main Footer with Copyright & Developer Attribution -->
+    <footer class="app-footer">
+      <div class="footer-container">
+        <div class="footer-brand">
+          <span>GridSnap Studio</span>
+        </div>
+        <div class="footer-copyright">
+          <span>© 2026 GridSnap Studio. All Rights Reserved.</span>
+        </div>
+        <div class="footer-credit">
+          <span>Designed &amp; Developed by <strong>Kanhaiya Bhatt</strong></span>
+        </div>
+      </div>
+    </footer>
 
     <!-- Export Options Modal -->
     <div id="export-modal" class="modal-backdrop hidden">
@@ -1471,237 +1784,238 @@
 
         <div class="modal-footer">
           <button id="btn-cancel-export" class="btn btn-ghost">Cancel</button>
-          
-          <button id="btn-native-share" class="btn btn-share btn-large" title="Share via WhatsApp, Instagram, or System Share">
+
+          <button id="btn-native-share" class="btn btn-share btn-large"
+            title="Share via WhatsApp, Instagram, or System Share">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="18" cy="5" r="3"/>
-              <circle cx="6" cy="12" r="3"/>
-              <circle cx="18" cy="19" r="3"/>
-              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              <circle cx="18" cy="5" r="3" />
+              <circle cx="6" cy="12" r="3" />
+              <circle cx="18" cy="19" r="3" />
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
             </svg>
             <span>Share Collage</span>
           </button>
 
           <button id="btn-download-now" class="btn btn-primary btn-large">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="7 10 12 15 17 10"/>
-              <line x1="12" y1="15" x2="12" y2="3"/>
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
             </svg>
             <span>Download Image</span>
           </button>
-  </div>
+        </div>
 
-  <!-- JavaScript Engine -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Application State
-      const state = {
-        currentGrid: '1x4',
-        width: 840,
-        height: 600,
-        rowGap: 2,
-        colGap: 5,
-        padTop: 4,
-        padRight: 4,
-        padBottom: 4,
-        padLeft: 4,
-        radius: 4,
-        bgColor: '#808080',
-        aspectRatio: '297/210',
-        selectedSlotIndex: null,
-        slots: [],
-        exportFormat: 'png',
-        exportScale: 'a4',
-        globalFitMode: 'fill'
-      };
+        <!-- JavaScript Engine -->
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            // Application State
+            const state = {
+              currentGrid: '1x4',
+              width: 840,
+              height: 600,
+              rowGap: 2,
+              colGap: 5,
+              padTop: 4,
+              padRight: 4,
+              padBottom: 4,
+              padLeft: 4,
+              radius: 4,
+              bgColor: '#808080',
+              aspectRatio: '297/210',
+              selectedSlotIndex: null,
+              slots: [],
+              exportFormat: 'png',
+              exportScale: 'a4',
+              globalFitMode: 'fill'
+            };
 
-      // Grid Layout Configs (Ordered in Ascending Series)
-      const GRID_CONFIGS = {
-        '1x4': { cols: 4, rows: 1, count: 4, name: '1. 📸 1 × 4 Photo Strip (4 Photos)', aspect: '297/210' },
-        '2x2': { cols: 2, rows: 2, count: 4, name: '2. 🖼️ 2 × 2 Quad (4 Photos)', aspect: '297/210' },
-        '2x3': { cols: 2, rows: 3, count: 6, name: '3. 📄 2 × 3 Photo Sheet (6 Photos)', aspect: '297/210' },
-        '2x4': { cols: 4, rows: 2, count: 8, name: '4. 📸 2 × 4 Passport Sheet (8 Photos - 3.5×4.5 cm)', aspect: '297/210', slotAspect: 3.5/4.5, targetCmW: 29.7, targetCmH: 21.0 },
-        '3x3': { cols: 3, rows: 3, count: 9, name: '5. ⏹️ 3 × 3 Square Grid (9 Photos)', aspect: '297/210' },
-        '2x5': { cols: 5, rows: 2, count: 10, name: '6. 📸 2 × 5 Photo Sheet (10 Photos)', aspect: '297/210' },
-        '3x4': { cols: 3, rows: 4, count: 12, name: '7. 📖 3 × 4 Mini Album (12 Photos)', aspect: '297/210' },
-        '5x5': { cols: 5, rows: 5, count: 25, name: '8. 🧩 5 × 5 Mosaic Sheet (25 Photos)', aspect: '297/210' },
-        '5x6': { cols: 5, rows: 6, count: 30, name: '9. 🎴 6 × 5 Passport Sheet (30 Photos - 3.5×4.5 cm)', aspect: '297/210', slotAspect: 3.5/4.5, targetCmW: 29.7, targetCmH: 21.0 },
-        '6x7': { cols: 6, rows: 7, count: 42, name: '10. 📄 6 × 7 Passport Print Sheet (42 Photos - 3.5×4.5 cm)', aspect: '297/210', slotAspect: 3.5/4.5, targetCmW: 29.7, targetCmH: 21.0 }
-      };
+            // Grid Layout Configs (Ordered in Ascending Series)
+            const GRID_CONFIGS = {
+              '1x4': { cols: 4, rows: 1, count: 4, name: '1. 📸 1 × 4 Photo Strip (4 Photos)', aspect: '297/210' },
+              '2x2': { cols: 2, rows: 2, count: 4, name: '2. 🖼️ 2 × 2 Quad (4 Photos)', aspect: '297/210' },
+              '2x3': { cols: 2, rows: 3, count: 6, name: '3. 📄 2 × 3 Photo Sheet (6 Photos)', aspect: '297/210' },
+              '2x4': { cols: 4, rows: 2, count: 8, name: '4. 📸 2 × 4 Passport Sheet (8 Photos - 3.5×4.5 cm)', aspect: '297/210', slotAspect: 3.5 / 4.5, targetCmW: 29.7, targetCmH: 21.0 },
+              '3x3': { cols: 3, rows: 3, count: 9, name: '5. ⏹️ 3 × 3 Square Grid (9 Photos)', aspect: '297/210' },
+              '2x5': { cols: 5, rows: 2, count: 10, name: '6. 📸 2 × 5 Photo Sheet (10 Photos)', aspect: '297/210' },
+              '3x4': { cols: 3, rows: 4, count: 12, name: '7. 📖 3 × 4 Mini Album (12 Photos)', aspect: '297/210' },
+              '5x5': { cols: 5, rows: 5, count: 25, name: '8. 🧩 5 × 5 Mosaic Sheet (25 Photos)', aspect: '297/210' },
+              '5x6': { cols: 5, rows: 6, count: 30, name: '9. 🎴 6 × 5 Passport Sheet (30 Photos - 3.5×4.5 cm)', aspect: '297/210', slotAspect: 3.5 / 4.5, targetCmW: 29.7, targetCmH: 21.0 },
+              '6x7': { cols: 6, rows: 7, count: 42, name: '10. 📄 6 × 7 Passport Print Sheet (42 Photos - 3.5×4.5 cm)', aspect: '297/210', slotAspect: 3.5 / 4.5, targetCmW: 29.7, targetCmH: 21.0 }
+            };
 
-      // DOM Elements
-      const resizableWrapper = document.getElementById('resizable-wrapper');
-      const collageFrame = document.getElementById('collage-frame');
-      const activeLayoutName = document.getElementById('active-layout-name');
-      const dimW = document.getElementById('dim-w');
-      const dimH = document.getElementById('dim-h');
-      
-      const batchUploadInput = document.getElementById('batch-upload-input');
-      const slotReplaceInput = document.getElementById('slot-replace-input');
-      const btnSamplePhotos = document.getElementById('btn-sample-photos');
-      const btnDuplicateHeader = document.getElementById('btn-duplicate-all-header');
-      const btnQuickDownload = document.getElementById('btn-quick-download');
-      
-      const tabBtns = document.querySelectorAll('.tab-btn');
-      const tabPanels = document.querySelectorAll('.tab-panel');
-      const presetCards = document.querySelectorAll('.preset-card');
-      const pillAspectBtns = document.querySelectorAll('#aspect-ratio-group .pill-btn');
-      
-      const inputRowGap = document.getElementById('input-row-gap');
-      const rowGapVal = document.getElementById('row-gap-val');
-      const inputColGap = document.getElementById('input-col-gap');
-      const colGapVal = document.getElementById('col-gap-val');
+            // DOM Elements
+            const resizableWrapper = document.getElementById('resizable-wrapper');
+            const collageFrame = document.getElementById('collage-frame');
+            const activeLayoutName = document.getElementById('active-layout-name');
+            const dimW = document.getElementById('dim-w');
+            const dimH = document.getElementById('dim-h');
 
-      const inputPadTop = document.getElementById('input-pad-top');
-      const padTopVal = document.getElementById('pad-top-val');
-      const inputPadRight = document.getElementById('input-pad-right');
-      const padRightVal = document.getElementById('pad-right-val');
-      const inputPadBottom = document.getElementById('input-pad-bottom');
-      const padBottomVal = document.getElementById('pad-bottom-val');
-      const inputPadLeft = document.getElementById('input-pad-left');
-      const padLeftVal = document.getElementById('pad-left-val');
-      
-      const inputRadius = document.getElementById('input-radius');
-      const radiusVal = document.getElementById('radius-val');
-      
-      const colorSwatches = document.querySelectorAll('#color-swatches .swatch');
-      const inputBgColor = document.getElementById('input-bg-color');
-      const hexColorText = document.getElementById('hex-color-text');
+            const batchUploadInput = document.getElementById('batch-upload-input');
+            const slotReplaceInput = document.getElementById('slot-replace-input');
+            const btnSamplePhotos = document.getElementById('btn-sample-photos');
+            const btnDuplicateHeader = document.getElementById('btn-duplicate-all-header');
+            const btnQuickDownload = document.getElementById('btn-quick-download');
 
-      const noSlotSelected = document.getElementById('no-slot-selected');
-      const slotControlsActive = document.getElementById('slot-controls-active');
-      const slotNumberBadge = document.getElementById('slot-number-badge');
-      const btnClearCurrentSlot = document.getElementById('btn-clear-current-slot');
-      const inputSlotZoom = document.getElementById('input-slot-zoom');
-      const slotZoomVal = document.getElementById('slot-zoom-val');
-      const btnRotateSlot = document.getElementById('btn-rotate-slot');
-      const btnFlipHSlot = document.getElementById('btn-flip-h-slot');
-      const btnResetSlotTransform = document.getElementById('btn-reset-slot-transform');
-      const fitModeBtns = document.querySelectorAll('#slot-fit-mode-group .pill-btn');
-      const btnDuplicateToAll = document.getElementById('btn-duplicate-to-all');
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabPanels = document.querySelectorAll('.tab-panel');
+            const presetCards = document.querySelectorAll('.preset-card');
+            const pillAspectBtns = document.querySelectorAll('#aspect-ratio-group .pill-btn');
 
-      const btnOpenExport = document.getElementById('btn-open-export');
-      const exportModal = document.getElementById('export-modal');
-      const btnCloseModal = document.getElementById('btn-close-modal');
-      const btnCancelExport = document.getElementById('btn-cancel-export');
-      const btnNativeShare = document.getElementById('btn-native-share');
-      
-      const sidebarDrawer = document.getElementById('sidebar-drawer');
-      const btnToggleMobileDrawer = document.getElementById('btn-toggle-mobile-drawer');
-      const btnCloseMobileDrawer = document.getElementById('btn-close-mobile-drawer');
-      const mobileNavBtns = document.querySelectorAll('.mobile-nav-btn');
-      const mbNavExport = document.getElementById('mb-nav-export');
+            const inputRowGap = document.getElementById('input-row-gap');
+            const rowGapVal = document.getElementById('row-gap-val');
+            const inputColGap = document.getElementById('input-col-gap');
+            const colGapVal = document.getElementById('col-gap-val');
 
-      // Helper for Haptic Feedback on Touch Devices
-      function triggerHaptic(duration = 10) {
-        if ('vibrate' in navigator) {
-          try { navigator.vibrate(duration); } catch(e) {}
-        }
-      }
-      const btnDownloadNow = document.getElementById('btn-download-now');
-      const exportFormatBtns = document.querySelectorAll('#export-format-group .pill-btn');
-      const exportScaleBtns = document.querySelectorAll('#export-scale-group .pill-btn');
-      const offscreenCanvas = document.getElementById('offscreen-canvas');
+            const inputPadTop = document.getElementById('input-pad-top');
+            const padTopVal = document.getElementById('pad-top-val');
+            const inputPadRight = document.getElementById('input-pad-right');
+            const padRightVal = document.getElementById('pad-right-val');
+            const inputPadBottom = document.getElementById('input-pad-bottom');
+            const padBottomVal = document.getElementById('pad-bottom-val');
+            const inputPadLeft = document.getElementById('input-pad-left');
+            const padLeftVal = document.getElementById('pad-left-val');
 
-      // Initialize App
-      function init() {
-        setupEventListeners();
-        setup8HandleResizing();
-        setGridFormat(state.currentGrid);
-        updateFrameStyles();
-      }
+            const inputRadius = document.getElementById('input-radius');
+            const radiusVal = document.getElementById('radius-val');
 
-      // Set Grid Layout Format
-      function setGridFormat(gridKey) {
-        const config = GRID_CONFIGS[gridKey];
-        if (!config) return;
+            const colorSwatches = document.querySelectorAll('#color-swatches .swatch');
+            const inputBgColor = document.getElementById('input-bg-color');
+            const hexColorText = document.getElementById('hex-color-text');
 
-        state.currentGrid = gridKey;
-        activeLayoutName.textContent = config.name;
+            const noSlotSelected = document.getElementById('no-slot-selected');
+            const slotControlsActive = document.getElementById('slot-controls-active');
+            const slotNumberBadge = document.getElementById('slot-number-badge');
+            const btnClearCurrentSlot = document.getElementById('btn-clear-current-slot');
+            const inputSlotZoom = document.getElementById('input-slot-zoom');
+            const slotZoomVal = document.getElementById('slot-zoom-val');
+            const btnRotateSlot = document.getElementById('btn-rotate-slot');
+            const btnFlipHSlot = document.getElementById('btn-flip-h-slot');
+            const btnResetSlotTransform = document.getElementById('btn-reset-slot-transform');
+            const fitModeBtns = document.querySelectorAll('#slot-fit-mode-group .pill-btn');
+            const btnDuplicateToAll = document.getElementById('btn-duplicate-to-all');
 
-        const oldSlots = [...state.slots];
-        state.slots = [];
+            const btnOpenExport = document.getElementById('btn-open-export');
+            const exportModal = document.getElementById('export-modal');
+            const btnCloseModal = document.getElementById('btn-close-modal');
+            const btnCancelExport = document.getElementById('btn-cancel-export');
+            const btnNativeShare = document.getElementById('btn-native-share');
 
-        for (let i = 0; i < config.count; i++) {
-          if (oldSlots[i] && oldSlots[i].url) {
-            state.slots.push({ ...oldSlots[i] });
-          } else {
-            state.slots.push(createEmptySlotData());
-          }
-        }
+            const sidebarDrawer = document.getElementById('sidebar-drawer');
+            const btnToggleMobileDrawer = document.getElementById('btn-toggle-mobile-drawer');
+            const btnCloseMobileDrawer = document.getElementById('btn-close-mobile-drawer');
+            const mobileNavBtns = document.querySelectorAll('.mobile-nav-btn');
+            const mbNavExport = document.getElementById('mb-nav-export');
 
-        // Cleanup unused Blob URLs
-        for (let i = config.count; i < oldSlots.length; i++) {
-          if (oldSlots[i] && oldSlots[i].isUserBlob && oldSlots[i].url) {
-            URL.revokeObjectURL(oldSlots[i].url);
-          }
-        }
+            // Helper for Haptic Feedback on Touch Devices
+            function triggerHaptic(duration = 10) {
+              if ('vibrate' in navigator) {
+                try { navigator.vibrate(duration); } catch (e) { }
+              }
+            }
+            const btnDownloadNow = document.getElementById('btn-download-now');
+            const exportFormatBtns = document.querySelectorAll('#export-format-group .pill-btn');
+            const exportScaleBtns = document.querySelectorAll('#export-scale-group .pill-btn');
+            const offscreenCanvas = document.getElementById('offscreen-canvas');
 
-        collageFrame.className = `collage-frame grid-${gridKey}`;
-        
-        if (config.targetCmW && config.targetCmH) {
-          state.width = Math.round(config.targetCmW * 28.3465);
-          state.height = Math.round(config.targetCmH * 28.3465);
-          updateFrameStyles();
-        }
+            // Initialize App
+            function init() {
+              setupEventListeners();
+              setup8HandleResizing();
+              setGridFormat(state.currentGrid);
+              updateFrameStyles();
+            }
 
-        presetCards.forEach(card => {
-          card.classList.toggle('active', card.dataset.grid === gridKey);
-        });
+            // Set Grid Layout Format
+            function setGridFormat(gridKey) {
+              const config = GRID_CONFIGS[gridKey];
+              if (!config) return;
 
-        renderGridSlots();
-        deselectSlot();
-      }
+              state.currentGrid = gridKey;
+              activeLayoutName.textContent = config.name;
 
-      function createEmptySlotData() {
-        return {
-          img: null,
-          url: null,
-          isUserBlob: false,
-          zoom: 1.0,
-          panX: 0,
-          panY: 0,
-          rotation: 0,
-          flipH: false,
-          fitMode: state ? (state.globalFitMode || 'fill') : 'fill'
-        };
-      }
+              const oldSlots = [...state.slots];
+              state.slots = [];
 
-      // Render Grid Slots
-      function renderGridSlots() {
-        collageFrame.innerHTML = '';
+              for (let i = 0; i < config.count; i++) {
+                if (oldSlots[i] && oldSlots[i].url) {
+                  state.slots.push({ ...oldSlots[i] });
+                } else {
+                  state.slots.push(createEmptySlotData());
+                }
+              }
 
-        state.slots.forEach((slotData, index) => {
-          const slotEl = document.createElement('div');
-          slotEl.className = 'slot';
-          slotEl.dataset.index = index;
+              // Cleanup unused Blob URLs
+              for (let i = config.count; i < oldSlots.length; i++) {
+                if (oldSlots[i] && oldSlots[i].isUserBlob && oldSlots[i].url) {
+                  URL.revokeObjectURL(oldSlots[i].url);
+                }
+              }
 
-          if (state.selectedSlotIndex === index) {
-            slotEl.classList.add('selected');
-          }
+              collageFrame.className = `collage-frame grid-${gridKey}`;
 
-          if (slotData.url) {
-            const imgWrapper = document.createElement('div');
-            imgWrapper.className = 'slot-image-wrapper';
+              if (config.targetCmW && config.targetCmH) {
+                state.width = Math.round(config.targetCmW * 28.3465);
+                state.height = Math.round(config.targetCmH * 28.3465);
+                updateFrameStyles();
+              }
 
-            const imgEl = document.createElement('img');
-            imgEl.src = slotData.url;
-            imgEl.alt = `Slot ${index + 1}`;
-            
-            const mode = slotData.fitMode || 'fill';
-            imgEl.className = mode === 'contain' ? 'fit-contain' : (mode === 'cover' ? 'fit-cover' : 'fit-fill');
-            imgEl.style.transform = getTransformCSS(slotData);
+              presetCards.forEach(card => {
+                card.classList.toggle('active', card.dataset.grid === gridKey);
+              });
 
-            setupImagePanEvents(imgEl, index);
+              renderGridSlots();
+              deselectSlot();
+            }
 
-            imgWrapper.appendChild(imgEl);
-            slotEl.appendChild(imgWrapper);
+            function createEmptySlotData() {
+              return {
+                img: null,
+                url: null,
+                isUserBlob: false,
+                zoom: 1.0,
+                panX: 0,
+                panY: 0,
+                rotation: 0,
+                flipH: false,
+                fitMode: state ? (state.globalFitMode || 'fill') : 'fill'
+              };
+            }
 
-            const actionsOverlay = document.createElement('div');
-            actionsOverlay.className = 'slot-actions-overlay';
-            actionsOverlay.innerHTML = `
+            // Render Grid Slots
+            function renderGridSlots() {
+              collageFrame.innerHTML = '';
+
+              state.slots.forEach((slotData, index) => {
+                const slotEl = document.createElement('div');
+                slotEl.className = 'slot';
+                slotEl.dataset.index = index;
+
+                if (state.selectedSlotIndex === index) {
+                  slotEl.classList.add('selected');
+                }
+
+                if (slotData.url) {
+                  const imgWrapper = document.createElement('div');
+                  imgWrapper.className = 'slot-image-wrapper';
+
+                  const imgEl = document.createElement('img');
+                  imgEl.src = slotData.url;
+                  imgEl.alt = `Slot ${index + 1}`;
+
+                  const mode = slotData.fitMode || 'fill';
+                  imgEl.className = mode === 'contain' ? 'fit-contain' : (mode === 'cover' ? 'fit-cover' : 'fit-fill');
+                  imgEl.style.transform = getTransformCSS(slotData);
+
+                  setupImagePanEvents(imgEl, index);
+
+                  imgWrapper.appendChild(imgEl);
+                  slotEl.appendChild(imgWrapper);
+
+                  const actionsOverlay = document.createElement('div');
+                  actionsOverlay.className = 'slot-actions-overlay';
+                  actionsOverlay.innerHTML = `
               <button class="slot-action-btn edit" title="Fine-Tune Image">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
               </button>
@@ -1710,21 +2024,21 @@
               </button>
             `;
 
-            actionsOverlay.querySelector('.edit').addEventListener('click', (e) => {
-              e.stopPropagation();
-              selectSlot(index);
-              switchTab('tab-slot');
-            });
+                  actionsOverlay.querySelector('.edit').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    selectSlot(index);
+                    switchTab('tab-slot');
+                  });
 
-            actionsOverlay.querySelector('.delete').addEventListener('click', (e) => {
-              e.stopPropagation();
-              clearSlot(index);
-            });
+                  actionsOverlay.querySelector('.delete').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    clearSlot(index);
+                  });
 
-            slotEl.appendChild(actionsOverlay);
-            slotEl.draggable = true;
-          } else {
-            slotEl.innerHTML = `
+                  slotEl.appendChild(actionsOverlay);
+                  slotEl.draggable = true;
+                } else {
+                  slotEl.innerHTML = `
               <div class="slot-empty-placeholder">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -1734,375 +2048,375 @@
                 <span>+ Add Photo</span>
               </div>
             `;
-          }
+                }
 
-          slotEl.addEventListener('click', () => {
-            if (!slotData.url) {
-              selectSlot(index);
-              slotReplaceInput.click();
-            } else {
-              selectSlot(index);
+                slotEl.addEventListener('click', () => {
+                  if (!slotData.url) {
+                    selectSlot(index);
+                    slotReplaceInput.click();
+                  } else {
+                    selectSlot(index);
+                  }
+                });
+
+                setupSlotDragAndDrop(slotEl, index);
+                collageFrame.appendChild(slotEl);
+              });
             }
-          });
 
-          setupSlotDragAndDrop(slotEl, index);
-          collageFrame.appendChild(slotEl);
-        });
-      }
+            function getTransformCSS(slotData) {
+              return `translate(${slotData.panX}px, ${slotData.panY}px) scale(${slotData.zoom}) rotate(${slotData.rotation}deg) scaleX(${slotData.flipH ? -1 : 1})`;
+            }
 
-      function getTransformCSS(slotData) {
-        return `translate(${slotData.panX}px, ${slotData.panY}px) scale(${slotData.zoom}) rotate(${slotData.rotation}deg) scaleX(${slotData.flipH ? -1 : 1})`;
-      }
+            // Image Panning & 2-Finger Touch Pinch Zoom inside Slot
+            function setupImagePanEvents(imgEl, index) {
+              let isDragging = false;
+              let startX = 0, startY = 0;
+              let initialPanX = 0, initialPanY = 0;
+              let initialPinchDist = 0;
+              let initialZoom = 1.0;
 
-      // Image Panning & 2-Finger Touch Pinch Zoom inside Slot
-      function setupImagePanEvents(imgEl, index) {
-        let isDragging = false;
-        let startX = 0, startY = 0;
-        let initialPanX = 0, initialPanY = 0;
-        let initialPinchDist = 0;
-        let initialZoom = 1.0;
+              imgEl.setAttribute('draggable', 'false');
 
-        imgEl.setAttribute('draggable', 'false');
+              const getPos = (e) => {
+                if (e.touches && e.touches.length > 0) {
+                  return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+                }
+                return { x: e.clientX, y: e.clientY };
+              };
 
-        const getPos = (e) => {
-          if (e.touches && e.touches.length > 0) {
-            return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-          }
-          return { x: e.clientX, y: e.clientY };
-        };
+              const getTouchDistance = (e) => {
+                if (e.touches && e.touches.length >= 2) {
+                  const dx = e.touches[0].clientX - e.touches[1].clientX;
+                  const dy = e.touches[0].clientY - e.touches[1].clientY;
+                  return Math.hypot(dx, dy);
+                }
+                return 0;
+              };
 
-        const getTouchDistance = (e) => {
-          if (e.touches && e.touches.length >= 2) {
-            const dx = e.touches[0].clientX - e.touches[1].clientX;
-            const dy = e.touches[0].clientY - e.touches[1].clientY;
-            return Math.hypot(dx, dy);
-          }
-          return 0;
-        };
+              const onStart = (e) => {
+                // Allow multi-touch pinch to scale
+                if (e.touches && e.touches.length > 1) {
+                  initialPinchDist = getTouchDistance(e);
+                  initialZoom = state.slots[index].zoom;
+                }
 
-        const onStart = (e) => {
-          // Allow multi-touch pinch to scale
-          if (e.touches && e.touches.length > 1) {
-            initialPinchDist = getTouchDistance(e);
-            initialZoom = state.slots[index].zoom;
-          }
+                isDragging = true;
+                const pos = getPos(e);
+                startX = pos.x;
+                startY = pos.y;
+                initialPanX = state.slots[index].panX;
+                initialPanY = state.slots[index].panY;
+                selectSlot(index);
 
-          isDragging = true;
-          const pos = getPos(e);
-          startX = pos.x;
-          startY = pos.y;
-          initialPanX = state.slots[index].panX;
-          initialPanY = state.slots[index].panY;
-          selectSlot(index);
+                document.addEventListener('mousemove', onMove, { passive: false });
+                document.addEventListener('mouseup', onEnd);
+                document.addEventListener('touchmove', onMove, { passive: false });
+                document.addEventListener('touchend', onEnd);
+              };
 
-          document.addEventListener('mousemove', onMove, { passive: false });
-          document.addEventListener('mouseup', onEnd);
-          document.addEventListener('touchmove', onMove, { passive: false });
-          document.addEventListener('touchend', onEnd);
-        };
+              const onMove = (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
 
-        const onMove = (e) => {
-          if (!isDragging) return;
-          e.preventDefault();
+                // Handle 2-Finger Touch Pinch Zoom
+                if (e.touches && e.touches.length === 2 && initialPinchDist > 0) {
+                  const currentDist = getTouchDistance(e);
+                  if (currentDist > 0) {
+                    const scaleRatio = currentDist / initialPinchDist;
+                    const newZoom = Math.max(0.5, Math.min(4.0, initialZoom * scaleRatio));
+                    state.slots[index].zoom = newZoom;
+                    imgEl.style.transform = getTransformCSS(state.slots[index]);
+                    if (state.selectedSlotIndex === index && inputSlotZoom) {
+                      inputSlotZoom.value = newZoom;
+                      if (slotZoomVal) slotZoomVal.textContent = `${newZoom.toFixed(2)}x`;
+                    }
+                  }
+                  return;
+                }
 
-          // Handle 2-Finger Touch Pinch Zoom
-          if (e.touches && e.touches.length === 2 && initialPinchDist > 0) {
-            const currentDist = getTouchDistance(e);
-            if (currentDist > 0) {
-              const scaleRatio = currentDist / initialPinchDist;
-              const newZoom = Math.max(0.5, Math.min(4.0, initialZoom * scaleRatio));
-              state.slots[index].zoom = newZoom;
-              imgEl.style.transform = getTransformCSS(state.slots[index]);
-              if (state.selectedSlotIndex === index && inputSlotZoom) {
-                inputSlotZoom.value = newZoom;
-                if (slotZoomVal) slotZoomVal.textContent = `${newZoom.toFixed(2)}x`;
+                // Handle 1-Finger Touch or Mouse Panning
+                const pos = getPos(e);
+                state.slots[index].panX = initialPanX + (pos.x - startX);
+                state.slots[index].panY = initialPanY + (pos.y - startY);
+                imgEl.style.transform = getTransformCSS(state.slots[index]);
+              };
+
+              const onEnd = (e) => {
+                if (e.touches && e.touches.length > 0) return; // Still tracking other fingers
+                isDragging = false;
+                initialPinchDist = 0;
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('mouseup', onEnd);
+                document.removeEventListener('touchmove', onMove);
+                document.removeEventListener('touchend', onEnd);
+              };
+
+              imgEl.addEventListener('mousedown', onStart);
+              imgEl.addEventListener('touchstart', onStart, { passive: false });
+            }
+
+            // Slot Drag-and-Drop Swapping
+            function setupSlotDragAndDrop(slotEl, index) {
+              slotEl.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', index.toString());
+                e.dataTransfer.effectAllowed = 'move';
+              });
+
+              slotEl.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                slotEl.classList.add('drag-over');
+              });
+
+              slotEl.addEventListener('dragleave', () => slotEl.classList.remove('drag-over'));
+
+              slotEl.addEventListener('drop', (e) => {
+                e.preventDefault();
+                slotEl.classList.remove('drag-over');
+
+                if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                  handleBatchFiles(Array.from(e.dataTransfer.files), index, false);
+                  return;
+                }
+
+                const sourceIdxStr = e.dataTransfer.getData('text/plain');
+                if (sourceIdxStr !== '') {
+                  const sourceIdx = parseInt(sourceIdxStr, 10);
+                  if (sourceIdx !== index && !isNaN(sourceIdx)) {
+                    swapSlots(sourceIdx, index);
+                  }
+                }
+              });
+            }
+
+            function swapSlots(idxA, idxB) {
+              const temp = state.slots[idxA];
+              state.slots[idxA] = state.slots[idxB];
+              state.slots[idxB] = temp;
+              renderGridSlots();
+              if (state.selectedSlotIndex === idxA) selectSlot(idxB);
+              else if (state.selectedSlotIndex === idxB) selectSlot(idxA);
+            }
+
+            // Selection Handlers
+            function selectSlot(index) {
+              state.selectedSlotIndex = index;
+              const slotData = state.slots[index];
+
+              const allSlots = collageFrame.querySelectorAll('.slot');
+              allSlots.forEach((s, idx) => s.classList.toggle('selected', idx === index));
+
+              if (slotData && slotData.url) {
+                noSlotSelected.classList.add('hidden');
+                slotControlsActive.classList.remove('hidden');
+
+                slotNumberBadge.textContent = `Slot ${index + 1}`;
+                inputSlotZoom.value = slotData.zoom;
+                slotZoomVal.textContent = `${slotData.zoom.toFixed(2)}x`;
+
+                fitModeBtns.forEach(btn => {
+                  btn.classList.toggle('active', btn.dataset.fit === (slotData.fitMode || 'fill'));
+                });
+              } else {
+                noSlotSelected.classList.remove('hidden');
+                slotControlsActive.classList.add('hidden');
               }
             }
-            return;
-          }
 
-          // Handle 1-Finger Touch or Mouse Panning
-          const pos = getPos(e);
-          state.slots[index].panX = initialPanX + (pos.x - startX);
-          state.slots[index].panY = initialPanY + (pos.y - startY);
-          imgEl.style.transform = getTransformCSS(state.slots[index]);
-        };
+            function deselectSlot() {
+              state.selectedSlotIndex = null;
+              noSlotSelected.classList.remove('hidden');
+              slotControlsActive.classList.add('hidden');
 
-        const onEnd = (e) => {
-          if (e.touches && e.touches.length > 0) return; // Still tracking other fingers
-          isDragging = false;
-          initialPinchDist = 0;
-          document.removeEventListener('mousemove', onMove);
-          document.removeEventListener('mouseup', onEnd);
-          document.removeEventListener('touchmove', onMove);
-          document.removeEventListener('touchend', onEnd);
-        };
-
-        imgEl.addEventListener('mousedown', onStart);
-        imgEl.addEventListener('touchstart', onStart, { passive: false });
-      }
-
-      // Slot Drag-and-Drop Swapping
-      function setupSlotDragAndDrop(slotEl, index) {
-        slotEl.addEventListener('dragstart', (e) => {
-          e.dataTransfer.setData('text/plain', index.toString());
-          e.dataTransfer.effectAllowed = 'move';
-        });
-
-        slotEl.addEventListener('dragover', (e) => {
-          e.preventDefault();
-          slotEl.classList.add('drag-over');
-        });
-
-        slotEl.addEventListener('dragleave', () => slotEl.classList.remove('drag-over'));
-
-        slotEl.addEventListener('drop', (e) => {
-          e.preventDefault();
-          slotEl.classList.remove('drag-over');
-
-          if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            handleBatchFiles(Array.from(e.dataTransfer.files), index, false);
-            return;
-          }
-
-          const sourceIdxStr = e.dataTransfer.getData('text/plain');
-          if (sourceIdxStr !== '') {
-            const sourceIdx = parseInt(sourceIdxStr, 10);
-            if (sourceIdx !== index && !isNaN(sourceIdx)) {
-              swapSlots(sourceIdx, index);
+              const allSlots = collageFrame.querySelectorAll('.slot');
+              allSlots.forEach(s => s.classList.remove('selected'));
             }
-          }
-        });
-      }
 
-      function swapSlots(idxA, idxB) {
-        const temp = state.slots[idxA];
-        state.slots[idxA] = state.slots[idxB];
-        state.slots[idxB] = temp;
-        renderGridSlots();
-        if (state.selectedSlotIndex === idxA) selectSlot(idxB);
-        else if (state.selectedSlotIndex === idxB) selectSlot(idxA);
-      }
-
-      // Selection Handlers
-      function selectSlot(index) {
-        state.selectedSlotIndex = index;
-        const slotData = state.slots[index];
-
-        const allSlots = collageFrame.querySelectorAll('.slot');
-        allSlots.forEach((s, idx) => s.classList.toggle('selected', idx === index));
-
-        if (slotData && slotData.url) {
-          noSlotSelected.classList.add('hidden');
-          slotControlsActive.classList.remove('hidden');
-
-          slotNumberBadge.textContent = `Slot ${index + 1}`;
-          inputSlotZoom.value = slotData.zoom;
-          slotZoomVal.textContent = `${slotData.zoom.toFixed(2)}x`;
-
-          fitModeBtns.forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.fit === (slotData.fitMode || 'fill'));
-          });
-        } else {
-          noSlotSelected.classList.remove('hidden');
-          slotControlsActive.classList.add('hidden');
-        }
-      }
-
-      function deselectSlot() {
-        state.selectedSlotIndex = null;
-        noSlotSelected.classList.remove('hidden');
-        slotControlsActive.classList.add('hidden');
-
-        const allSlots = collageFrame.querySelectorAll('.slot');
-        allSlots.forEach(s => s.classList.remove('selected'));
-      }
-
-      function clearSlot(index) {
-        if (state.slots[index]) {
-          if (state.slots[index].isUserBlob && state.slots[index].url) {
-            URL.revokeObjectURL(state.slots[index].url);
-          }
-          state.slots[index] = createEmptySlotData();
-          renderGridSlots();
-          deselectSlot();
-        }
-      }
-
-      // Passport Duplication Mode
-      function duplicateToAllSlots(sourceIndex) {
-        let sourceSlot = state.slots[sourceIndex];
-        if (!sourceSlot || !sourceSlot.url) {
-          const filledIdx = state.slots.findIndex(s => s.url !== null);
-          if (filledIdx !== -1) sourceSlot = state.slots[filledIdx];
-        }
-
-        if (!sourceSlot || !sourceSlot.url) {
-          state.selectedSlotIndex = 0;
-          slotReplaceInput.setAttribute('data-duplicate-all', 'true');
-          slotReplaceInput.click();
-          return;
-        }
-
-        for (let i = 0; i < state.slots.length; i++) {
-          state.slots[i] = { ...sourceSlot };
-        }
-        renderGridSlots();
-      }
-
-      function triggerPassportMode() {
-        setGridFormat('2x4');
-        const sourceIdx = state.selectedSlotIndex !== null ? state.selectedSlotIndex : 0;
-        duplicateToAllSlots(sourceIdx);
-      }
-
-      // Batch & Replace File Upload
-      function handleBatchFiles(files, startSlotIdx = 0, replaceSingleSlot = false) {
-        const fileList = Array.from(files);
-        const imageFiles = fileList.filter(f => 
-          (f.type && f.type.startsWith('image/')) || 
-          /\.(jpg|jpeg|png|webp|gif|bmp|svg|jfif|avif)$/i.test(f.name)
-        );
-        if (imageFiles.length === 0) return;
-
-        const isDuplicateAll = slotReplaceInput.getAttribute('data-duplicate-all') === 'true';
-        slotReplaceInput.removeAttribute('data-duplicate-all');
-
-        // Case 1: Explicit Duplicate to All Flag (Passport duplication)
-        if (isDuplicateAll) {
-          const targetIdx = startSlotIdx >= 0 && startSlotIdx < state.slots.length ? startSlotIdx : 0;
-          const file = imageFiles[0];
-          const url = URL.createObjectURL(file);
-          const img = new Image();
-          img.onload = () => {
-            if (state.slots[targetIdx] && state.slots[targetIdx].isUserBlob && state.slots[targetIdx].url) {
-              URL.revokeObjectURL(state.slots[targetIdx].url);
-            }
-            state.slots[targetIdx] = {
-              img: img,
-              url: url,
-              isUserBlob: true,
-              zoom: 1.0,
-              panX: 0,
-              panY: 0,
-              rotation: 0,
-              flipH: false,
-              fitMode: state.globalFitMode || 'fill'
-            };
-            duplicateToAllSlots(targetIdx);
-          };
-          img.src = url;
-          return;
-        }
-
-        // Case 2: Replace ONLY a single specific slot when replacing single slot
-        if (replaceSingleSlot && imageFiles.length === 1) {
-          const targetIdx = startSlotIdx >= 0 && startSlotIdx < state.slots.length ? startSlotIdx : 0;
-          const file = imageFiles[0];
-          const url = URL.createObjectURL(file);
-          const img = new Image();
-          img.onload = () => {
-            if (state.slots[targetIdx] && state.slots[targetIdx].isUserBlob && state.slots[targetIdx].url) {
-              URL.revokeObjectURL(state.slots[targetIdx].url);
-            }
-            state.slots[targetIdx] = {
-              img: img,
-              url: url,
-              isUserBlob: true,
-              zoom: 1.0,
-              panX: 0,
-              panY: 0,
-              rotation: 0,
-              flipH: false,
-              fitMode: state.globalFitMode || 'fill'
-            };
-            renderGridSlots();
-            selectSlot(targetIdx);
-          };
-          img.src = url;
-          return;
-        }
-
-        // Case 3: Batch Upload mode (replaceSingleSlot === false) with ONLY 1 photo -> Fill ALL slots
-        if (!replaceSingleSlot && imageFiles.length === 1) {
-          const file = imageFiles[0];
-          const url = URL.createObjectURL(file);
-          const img = new Image();
-          img.onload = () => {
-            const singleSlotData = {
-              img: img,
-              url: url,
-              isUserBlob: true,
-              zoom: 1.0,
-              panX: 0,
-              panY: 0,
-              rotation: 0,
-              flipH: false,
-              fitMode: state.globalFitMode || 'fill'
-            };
-
-            for (let i = 0; i < state.slots.length; i++) {
-              if (state.slots[i] && state.slots[i].isUserBlob && state.slots[i].url && state.slots[i].url !== url) {
-                URL.revokeObjectURL(state.slots[i].url);
+            function clearSlot(index) {
+              if (state.slots[index]) {
+                if (state.slots[index].isUserBlob && state.slots[index].url) {
+                  URL.revokeObjectURL(state.slots[index].url);
+                }
+                state.slots[index] = createEmptySlotData();
+                renderGridSlots();
+                deselectSlot();
               }
-              state.slots[i] = { ...singleSlotData };
             }
 
-            renderGridSlots();
-            selectSlot(startSlotIdx >= 0 && startSlotIdx < state.slots.length ? startSlotIdx : 0);
-          };
-          img.src = url;
-          return;
-        }
+            // Passport Duplication Mode
+            function duplicateToAllSlots(sourceIndex) {
+              let sourceSlot = state.slots[sourceIndex];
+              if (!sourceSlot || !sourceSlot.url) {
+                const filledIdx = state.slots.findIndex(s => s.url !== null);
+                if (filledIdx !== -1) sourceSlot = state.slots[filledIdx];
+              }
 
-        // Case 4: Multiple files upload (>1) -> Fill slots sequentially starting from startSlotIdx
-        let currentTargetIdx = startSlotIdx >= 0 && startSlotIdx < state.slots.length ? startSlotIdx : 0;
+              if (!sourceSlot || !sourceSlot.url) {
+                state.selectedSlotIndex = 0;
+                slotReplaceInput.setAttribute('data-duplicate-all', 'true');
+                slotReplaceInput.click();
+                return;
+              }
 
-        imageFiles.forEach((file) => {
-          if (currentTargetIdx >= state.slots.length) return;
-
-          const slotIdxToFill = currentTargetIdx;
-          currentTargetIdx++;
-
-          const url = URL.createObjectURL(file);
-          const img = new Image();
-          img.onload = () => {
-            if (state.slots[slotIdxToFill] && state.slots[slotIdxToFill].isUserBlob && state.slots[slotIdxToFill].url) {
-              URL.revokeObjectURL(state.slots[slotIdxToFill].url);
+              for (let i = 0; i < state.slots.length; i++) {
+                state.slots[i] = { ...sourceSlot };
+              }
+              renderGridSlots();
             }
-            state.slots[slotIdxToFill] = {
-              img: img,
-              url: url,
-              isUserBlob: true,
-              zoom: 1.0,
-              panX: 0,
-              panY: 0,
-              rotation: 0,
-              flipH: false,
-              fitMode: state.globalFitMode || 'fill'
-            };
-            renderGridSlots();
-          };
-          img.src = url;
-        });
-      }
 
-      // Load Sample Photos
-      function loadSamplePhotos() {
-        const sampleGradients = [
-          { bg: 'linear-gradient(135deg, #6366f1, #a855f7)', title: 'ID Photo', emoji: '👤' },
-          { bg: 'linear-gradient(135deg, #ff7e5f, #feb47b)', title: 'Golden Hour', emoji: '🌅' },
-          { bg: 'linear-gradient(135deg, #00c6ff, #0072ff)', title: 'Ocean Breeze', emoji: '🌊' },
-          { bg: 'linear-gradient(135deg, #11998e, #38ef7d)', title: 'Forest Trail', emoji: '🌲' },
-          { bg: 'linear-gradient(135deg, #f857a6, #ff5858)', title: 'Neon Lights', emoji: '✨' },
-          { bg: 'linear-gradient(135deg, #43e97b, #38f9d7)', title: 'Summer Vibe', emoji: '🌴' },
-          { bg: 'linear-gradient(135deg, #fa709a, #fee140)', title: 'Peach Blossom', emoji: '🌸' },
-          { bg: 'linear-gradient(135deg, #30cfd0, #330867)', title: 'Cosmic Sky', emoji: '🌌' }
-        ];
+            function triggerPassportMode() {
+              setGridFormat('2x4');
+              const sourceIdx = state.selectedSlotIndex !== null ? state.selectedSlotIndex : 0;
+              duplicateToAllSlots(sourceIdx);
+            }
 
-        state.slots.forEach((_, idx) => {
-          const sample = sampleGradients[idx % sampleGradients.length];
-          const svgString = `
+            // Batch & Replace File Upload
+            function handleBatchFiles(files, startSlotIdx = 0, replaceSingleSlot = false) {
+              const fileList = Array.from(files);
+              const imageFiles = fileList.filter(f =>
+                (f.type && f.type.startsWith('image/')) ||
+                /\.(jpg|jpeg|png|webp|gif|bmp|svg|jfif|avif)$/i.test(f.name)
+              );
+              if (imageFiles.length === 0) return;
+
+              const isDuplicateAll = slotReplaceInput.getAttribute('data-duplicate-all') === 'true';
+              slotReplaceInput.removeAttribute('data-duplicate-all');
+
+              // Case 1: Explicit Duplicate to All Flag (Passport duplication)
+              if (isDuplicateAll) {
+                const targetIdx = startSlotIdx >= 0 && startSlotIdx < state.slots.length ? startSlotIdx : 0;
+                const file = imageFiles[0];
+                const url = URL.createObjectURL(file);
+                const img = new Image();
+                img.onload = () => {
+                  if (state.slots[targetIdx] && state.slots[targetIdx].isUserBlob && state.slots[targetIdx].url) {
+                    URL.revokeObjectURL(state.slots[targetIdx].url);
+                  }
+                  state.slots[targetIdx] = {
+                    img: img,
+                    url: url,
+                    isUserBlob: true,
+                    zoom: 1.0,
+                    panX: 0,
+                    panY: 0,
+                    rotation: 0,
+                    flipH: false,
+                    fitMode: state.globalFitMode || 'fill'
+                  };
+                  duplicateToAllSlots(targetIdx);
+                };
+                img.src = url;
+                return;
+              }
+
+              // Case 2: Replace ONLY a single specific slot when replacing single slot
+              if (replaceSingleSlot && imageFiles.length === 1) {
+                const targetIdx = startSlotIdx >= 0 && startSlotIdx < state.slots.length ? startSlotIdx : 0;
+                const file = imageFiles[0];
+                const url = URL.createObjectURL(file);
+                const img = new Image();
+                img.onload = () => {
+                  if (state.slots[targetIdx] && state.slots[targetIdx].isUserBlob && state.slots[targetIdx].url) {
+                    URL.revokeObjectURL(state.slots[targetIdx].url);
+                  }
+                  state.slots[targetIdx] = {
+                    img: img,
+                    url: url,
+                    isUserBlob: true,
+                    zoom: 1.0,
+                    panX: 0,
+                    panY: 0,
+                    rotation: 0,
+                    flipH: false,
+                    fitMode: state.globalFitMode || 'fill'
+                  };
+                  renderGridSlots();
+                  selectSlot(targetIdx);
+                };
+                img.src = url;
+                return;
+              }
+
+              // Case 3: Batch Upload mode (replaceSingleSlot === false) with ONLY 1 photo -> Fill ALL slots
+              if (!replaceSingleSlot && imageFiles.length === 1) {
+                const file = imageFiles[0];
+                const url = URL.createObjectURL(file);
+                const img = new Image();
+                img.onload = () => {
+                  const singleSlotData = {
+                    img: img,
+                    url: url,
+                    isUserBlob: true,
+                    zoom: 1.0,
+                    panX: 0,
+                    panY: 0,
+                    rotation: 0,
+                    flipH: false,
+                    fitMode: state.globalFitMode || 'fill'
+                  };
+
+                  for (let i = 0; i < state.slots.length; i++) {
+                    if (state.slots[i] && state.slots[i].isUserBlob && state.slots[i].url && state.slots[i].url !== url) {
+                      URL.revokeObjectURL(state.slots[i].url);
+                    }
+                    state.slots[i] = { ...singleSlotData };
+                  }
+
+                  renderGridSlots();
+                  selectSlot(startSlotIdx >= 0 && startSlotIdx < state.slots.length ? startSlotIdx : 0);
+                };
+                img.src = url;
+                return;
+              }
+
+              // Case 4: Multiple files upload (>1) -> Fill slots sequentially starting from startSlotIdx
+              let currentTargetIdx = startSlotIdx >= 0 && startSlotIdx < state.slots.length ? startSlotIdx : 0;
+
+              imageFiles.forEach((file) => {
+                if (currentTargetIdx >= state.slots.length) return;
+
+                const slotIdxToFill = currentTargetIdx;
+                currentTargetIdx++;
+
+                const url = URL.createObjectURL(file);
+                const img = new Image();
+                img.onload = () => {
+                  if (state.slots[slotIdxToFill] && state.slots[slotIdxToFill].isUserBlob && state.slots[slotIdxToFill].url) {
+                    URL.revokeObjectURL(state.slots[slotIdxToFill].url);
+                  }
+                  state.slots[slotIdxToFill] = {
+                    img: img,
+                    url: url,
+                    isUserBlob: true,
+                    zoom: 1.0,
+                    panX: 0,
+                    panY: 0,
+                    rotation: 0,
+                    flipH: false,
+                    fitMode: state.globalFitMode || 'fill'
+                  };
+                  renderGridSlots();
+                };
+                img.src = url;
+              });
+            }
+
+            // Load Sample Photos
+            function loadSamplePhotos() {
+              const sampleGradients = [
+                { bg: 'linear-gradient(135deg, #6366f1, #a855f7)', title: 'ID Photo', emoji: '👤' },
+                { bg: 'linear-gradient(135deg, #ff7e5f, #feb47b)', title: 'Golden Hour', emoji: '🌅' },
+                { bg: 'linear-gradient(135deg, #00c6ff, #0072ff)', title: 'Ocean Breeze', emoji: '🌊' },
+                { bg: 'linear-gradient(135deg, #11998e, #38ef7d)', title: 'Forest Trail', emoji: '🌲' },
+                { bg: 'linear-gradient(135deg, #f857a6, #ff5858)', title: 'Neon Lights', emoji: '✨' },
+                { bg: 'linear-gradient(135deg, #43e97b, #38f9d7)', title: 'Summer Vibe', emoji: '🌴' },
+                { bg: 'linear-gradient(135deg, #fa709a, #fee140)', title: 'Peach Blossom', emoji: '🌸' },
+                { bg: 'linear-gradient(135deg, #30cfd0, #330867)', title: 'Cosmic Sky', emoji: '🌌' }
+              ];
+
+              state.slots.forEach((_, idx) => {
+                const sample = sampleGradients[idx % sampleGradients.length];
+                const svgString = `
             <svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
               <defs>
                 <linearGradient id="g${idx}" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -2116,535 +2430,552 @@
               <text x="300" y="420" font-family="sans-serif" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle">${sample.title}</text>
             </svg>
           `;
-          const url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgString)}`;
-          const img = new Image();
-          img.onload = () => {
-            state.slots[idx] = {
-              img: img,
-              url: url,
-              isUserBlob: false,
-              zoom: 1.0,
-              panX: 0,
-              panY: 0,
-              rotation: 0,
-              flipH: false,
-              fitMode: 'fill'
-            };
-            renderGridSlots();
-          };
-          img.src = url;
-        });
-      }
-
-      // Dynamic Frame Resizing & 8 Interactive Drag Handles Logic (Mouse + Touch)
-      function setup8HandleResizing() {
-        const handles = resizableWrapper.querySelectorAll('.handle');
-        let activeHandle = null;
-        let startX = 0, startY = 0;
-        let startW = 0, startH = 0;
-
-        const getPos = (e) => {
-          if (e.touches && e.touches.length > 0) {
-            return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-          }
-          return { x: e.clientX, y: e.clientY };
-        };
-
-        handles.forEach(handle => {
-          const onStart = (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-
-            activeHandle = handle.dataset.handle;
-            handle.classList.add('dragging');
-            const pos = getPos(e);
-            startX = pos.x;
-            startY = pos.y;
-            startW = state.width;
-            startH = state.height;
-
-            document.addEventListener('mousemove', onMove, { passive: false });
-            document.addEventListener('mouseup', onEnd);
-            document.addEventListener('touchmove', onMove, { passive: false });
-            document.addEventListener('touchend', onEnd);
-          };
-
-          handle.addEventListener('mousedown', onStart);
-          handle.addEventListener('touchstart', onStart, { passive: false });
-        });
-
-        function onMove(e) {
-          if (!activeHandle) return;
-          e.preventDefault();
-          const pos = getPos(e);
-          const dx = pos.x - startX;
-          const dy = pos.y - startY;
-
-          let newW = startW;
-          let newH = startH;
-
-          if (activeHandle.includes('right')) newW = startW + dx;
-          if (activeHandle.includes('left')) newW = startW - dx;
-          if (activeHandle.includes('bottom')) newH = startH + dy;
-          if (activeHandle.includes('top')) newH = startH - dy;
-
-          // Minimum dimensions constraint
-          state.width = Math.max(260, Math.min(2400, newW));
-          state.height = Math.max(260, Math.min(2400, newH));
-
-          updateFrameStyles();
-        }
-
-        function onEnd() {
-          if (activeHandle) {
-            const el = resizableWrapper.querySelector(`[data-handle="${activeHandle}"]`);
-            if (el) el.classList.remove('dragging');
-          }
-          activeHandle = null;
-          document.removeEventListener('mousemove', onMove);
-          document.removeEventListener('mouseup', onEnd);
-          document.removeEventListener('touchmove', onMove);
-          document.removeEventListener('touchend', onEnd);
-        }
-      }
-
-      // Update Dynamic CSS Variables & Dimension Tooltip & Mobile Viewport Scale
-      function updateFrameStyles() {
-        resizableWrapper.style.width = `${state.width}px`;
-        resizableWrapper.style.height = `${state.height}px`;
-
-        // Mobile Canvas Auto-Scaling: Ensures full frame + 8 handles fit cleanly inside small screens
-        const workspaceEl = document.querySelector('.canvas-workspace');
-        if (workspaceEl) {
-          const availW = workspaceEl.clientWidth - (window.innerWidth <= 768 ? 20 : 40);
-          const availH = workspaceEl.clientHeight - (window.innerWidth <= 768 ? 20 : 40);
-
-          if (availW > 0 && availH > 0 && (state.width > availW || state.height > availH)) {
-            const fitScale = Math.min(availW / state.width, availH / state.height, 1);
-            resizableWrapper.style.transform = `scale(${fitScale})`;
-            resizableWrapper.style.transformOrigin = 'center center';
-          } else {
-            resizableWrapper.style.transform = 'none';
-          }
-        }
-
-        collageFrame.style.setProperty('--row-gap', `${state.rowGap}px`);
-        collageFrame.style.setProperty('--col-gap', `${state.colGap}px`);
-        collageFrame.style.setProperty('--pad-top', `${state.padTop}px`);
-        collageFrame.style.setProperty('--pad-right', `${state.padRight}px`);
-        collageFrame.style.setProperty('--pad-bottom', `${state.padBottom}px`);
-        collageFrame.style.setProperty('--pad-left', `${state.padLeft}px`);
-        collageFrame.style.setProperty('--border-radius', `${state.radius}px`);
-        collageFrame.style.setProperty('--bg-color', state.bgColor);
-
-        const config = GRID_CONFIGS[state.currentGrid];
-        const dimensionTooltip = document.getElementById('dimension-tooltip');
-
-        if (dimensionTooltip) {
-          if (config && (config.slotAspect || state.currentGrid === '2x4' || state.currentGrid === '5x6' || state.currentGrid === '6x7')) {
-            const widthCm = (state.width / 28.3465).toFixed(1);
-            const heightCm = (state.height / 28.3465).toFixed(1);
-            dimensionTooltip.innerHTML = `Width: <span>${widthCm} cm</span> | Height: <span>${heightCm} cm</span> <span style="opacity:0.75; margin-left:6px;">(Photo: 3.5 × 4.5 cm)</span>`;
-          } else {
-            dimensionTooltip.innerHTML = `Width: <span id="dim-w">${Math.round(state.width)}</span>px | Height: <span id="dim-h">${Math.round(state.height)}</span>px`;
-          }
-        }
-
-        rowGapVal.textContent = `${state.rowGap}px`;
-        colGapVal.textContent = `${state.colGap}px`;
-        padTopVal.textContent = `${state.padTop}px`;
-        padRightVal.textContent = `${state.padRight}px`;
-        padBottomVal.textContent = `${state.padBottom}px`;
-        padLeftVal.textContent = `${state.padLeft}px`;
-        radiusVal.textContent = `${state.radius}px`;
-
-        inputRowGap.value = state.rowGap;
-        inputColGap.value = state.colGap;
-        inputPadTop.value = state.padTop;
-        inputPadRight.value = state.padRight;
-        inputPadBottom.value = state.padBottom;
-        inputPadLeft.value = state.padLeft;
-        inputRadius.value = state.radius;
-      }
-
-      function switchTab(tabId) {
-        tabBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tabId));
-        tabPanels.forEach(panel => panel.classList.toggle('active', panel.id === tabId));
-      }
-
-      // Setup Event Listeners
-      function setupEventListeners() {
-        tabBtns.forEach(btn => btn.addEventListener('click', () => {
-          if (btn.id === 'btn-toggle-sidebar-collapse') return;
-          if (sidebarDrawer && sidebarDrawer.classList.contains('compact-mode')) {
-            sidebarDrawer.classList.remove('compact-mode');
-            const labelSpan = btnToggleSidebarCollapse ? btnToggleSidebarCollapse.querySelector('.btn-collapse-label') : null;
-            if (labelSpan) labelSpan.textContent = 'Compact';
-            setTimeout(updateFrameStyles, 300);
-          }
-          switchTab(btn.dataset.tab);
-        }));
-        presetCards.forEach(card => card.addEventListener('click', () => setGridFormat(card.dataset.grid)));
-
-        const globalFitBtns = document.querySelectorAll('#global-fit-mode-group .pill-btn');
-        globalFitBtns.forEach(btn => {
-          btn.addEventListener('click', () => {
-            globalFitBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            state.globalFitMode = btn.dataset.fit;
-            state.slots.forEach(slot => {
-              if (slot) slot.fitMode = btn.dataset.fit;
-            });
-            renderGridSlots();
-          });
-        });
-
-        pillAspectBtns.forEach(btn => {
-          btn.addEventListener('click', () => {
-            pillAspectBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            const aspectStr = btn.dataset.aspect;
-            state.aspectRatio = aspectStr;
-            const [aw, ah] = aspectStr.split('/').map(Number);
-            
-            // Recalculate frame height based on target aspect ratio
-            state.height = Math.round(state.width * (ah / aw));
-            updateFrameStyles();
-          });
-        });
-
-        // 4-Way Padding & Gap Sliders
-        inputRowGap.addEventListener('input', (e) => { state.rowGap = parseInt(e.target.value, 10); updateFrameStyles(); });
-        inputColGap.addEventListener('input', (e) => { state.colGap = parseInt(e.target.value, 10); updateFrameStyles(); });
-        
-        inputPadTop.addEventListener('input', (e) => { state.padTop = parseInt(e.target.value, 10); updateFrameStyles(); });
-        inputPadRight.addEventListener('input', (e) => { state.padRight = parseInt(e.target.value, 10); updateFrameStyles(); });
-        inputPadBottom.addEventListener('input', (e) => { state.padBottom = parseInt(e.target.value, 10); updateFrameStyles(); });
-        inputPadLeft.addEventListener('input', (e) => { state.padLeft = parseInt(e.target.value, 10); updateFrameStyles(); });
-        inputRadius.addEventListener('input', (e) => { state.radius = parseInt(e.target.value, 10); updateFrameStyles(); });
-
-        btnDuplicateHeader.addEventListener('click', triggerPassportMode);
-        if (btnQuickDownload) btnQuickDownload.addEventListener('click', downloadCollageImage);
-        
-        btnDuplicateToAll.addEventListener('click', () => {
-          const idx = state.selectedSlotIndex !== null ? state.selectedSlotIndex : 0;
-          duplicateToAllSlots(idx);
-        });
-
-        colorSwatches.forEach(swatch => {
-          swatch.addEventListener('click', () => {
-            colorSwatches.forEach(s => s.classList.remove('active'));
-            swatch.classList.add('active');
-            state.bgColor = swatch.dataset.color;
-            inputBgColor.value = swatch.dataset.color === 'transparent' ? '#ffffff' : swatch.dataset.color;
-            hexColorText.textContent = swatch.dataset.color;
-            updateFrameStyles();
-          });
-        });
-
-        inputBgColor.addEventListener('input', (e) => {
-          state.bgColor = e.target.value;
-          hexColorText.textContent = e.target.value;
-          colorSwatches.forEach(s => s.classList.remove('active'));
-          updateFrameStyles();
-        });
-
-        batchUploadInput.addEventListener('change', (e) => {
-          if (e.target.files && e.target.files.length > 0) {
-            handleBatchFiles(Array.from(e.target.files), 0, false);
-            e.target.value = '';
-          }
-        });
-
-        slotReplaceInput.addEventListener('change', (e) => {
-          if (e.target.files && e.target.files.length > 0) {
-            const idx = state.selectedSlotIndex !== null ? state.selectedSlotIndex : 0;
-            handleBatchFiles(Array.from(e.target.files), idx, true);
-            e.target.value = '';
-          }
-        });
-
-        fitModeBtns.forEach(btn => {
-          btn.addEventListener('click', () => {
-            if (state.selectedSlotIndex !== null && state.slots[state.selectedSlotIndex]) {
-              fitModeBtns.forEach(b => b.classList.remove('active'));
-              btn.classList.add('active');
-              state.slots[state.selectedSlotIndex].fitMode = btn.dataset.fit;
-              renderGridSlots();
+                const url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgString)}`;
+                const img = new Image();
+                img.onload = () => {
+                  state.slots[idx] = {
+                    img: img,
+                    url: url,
+                    isUserBlob: false,
+                    zoom: 1.0,
+                    panX: 0,
+                    panY: 0,
+                    rotation: 0,
+                    flipH: false,
+                    fitMode: 'fill'
+                  };
+                  renderGridSlots();
+                };
+                img.src = url;
+              });
             }
-          });
-        });
 
-        btnSamplePhotos.addEventListener('click', loadSamplePhotos);
+            // Dynamic Frame Resizing & 8 Interactive Drag Handles Logic (Mouse + Touch)
+            let currentFitScale = 1;
 
-        inputSlotZoom.addEventListener('input', (e) => {
-          if (state.selectedSlotIndex !== null && state.slots[state.selectedSlotIndex]) {
-            const z = parseFloat(e.target.value);
-            state.slots[state.selectedSlotIndex].zoom = z;
-            slotZoomVal.textContent = `${z.toFixed(2)}x`;
-            renderGridSlots();
-          }
-        });
+            function setup8HandleResizing() {
+              const handles = resizableWrapper.querySelectorAll('.handle');
+              let activeHandle = null;
+              let startX = 0, startY = 0;
+              let startW = 0, startH = 0;
 
-        btnRotateSlot.addEventListener('click', () => {
-          if (state.selectedSlotIndex !== null && state.slots[state.selectedSlotIndex]) {
-            state.slots[state.selectedSlotIndex].rotation = (state.slots[state.selectedSlotIndex].rotation + 90) % 360;
-            renderGridSlots();
-          }
-        });
-
-        btnFlipHSlot.addEventListener('click', () => {
-          if (state.selectedSlotIndex !== null && state.slots[state.selectedSlotIndex]) {
-            state.slots[state.selectedSlotIndex].flipH = !state.slots[state.selectedSlotIndex].flipH;
-            renderGridSlots();
-          }
-        });
-
-        btnResetSlotTransform.addEventListener('click', () => {
-          if (state.selectedSlotIndex !== null && state.slots[state.selectedSlotIndex]) {
-            state.slots[state.selectedSlotIndex].zoom = 1.0;
-            state.slots[state.selectedSlotIndex].panX = 0;
-            state.slots[state.selectedSlotIndex].panY = 0;
-            state.slots[state.selectedSlotIndex].rotation = 0;
-            state.slots[state.selectedSlotIndex].flipH = false;
-            state.slots[state.selectedSlotIndex].fitMode = 'fill';
-            selectSlot(state.selectedSlotIndex);
-            renderGridSlots();
-          }
-        });
-
-        btnClearCurrentSlot.addEventListener('click', () => {
-          if (state.selectedSlotIndex !== null) clearSlot(state.selectedSlotIndex);
-        });
-
-        btnOpenExport.addEventListener('click', () => {
-          exportModal.classList.remove('hidden');
-          renderExportCanvasPreview();
-        });
-
-        btnCloseModal.addEventListener('click', () => exportModal.classList.add('hidden'));
-        btnCancelExport.addEventListener('click', () => exportModal.classList.add('hidden'));
-
-        exportFormatBtns.forEach(btn => {
-          btn.addEventListener('click', () => {
-            exportFormatBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            state.exportFormat = btn.dataset.format;
-          });
-        });
-
-        exportScaleBtns.forEach(btn => {
-          btn.addEventListener('click', () => {
-            exportScaleBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            state.exportScale = btn.dataset.scale;
-            renderExportCanvasPreview();
-          });
-        });
-
-        btnDownloadNow.addEventListener('click', downloadCollageImage);
-
-        if (btnNativeShare) {
-          btnNativeShare.addEventListener('click', shareCollageImage);
-        }
-
-        window.addEventListener('resize', updateFrameStyles);
-      }
-
-      // Offscreen Canvas Exporter (Calculates exact interactive width, height, 4-sided padding, row/col gaps)
-      function renderExportCanvasPreview(callback) {
-        const config = GRID_CONFIGS[state.currentGrid];
-        
-        let canvasWidth, canvasHeight;
-        if (state.exportScale === 'a4') {
-          if (state.width <= state.height) {
-            canvasWidth = 2480;
-            canvasHeight = 3508;
-          } else {
-            canvasWidth = 3508;
-            canvasHeight = 2480;
-          }
-        } else {
-          const mult = parseInt(state.exportScale, 10) || 2;
-          canvasWidth = Math.round(state.width * mult);
-          canvasHeight = Math.round(state.height * mult);
-        }
-
-        offscreenCanvas.width = canvasWidth;
-        offscreenCanvas.height = canvasHeight;
-
-        const ctx = offscreenCanvas.getContext('2d');
-        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-
-        // Draw Background
-        if (state.bgColor !== 'transparent') {
-          ctx.fillStyle = state.bgColor;
-          ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-        }
-
-        const scaleX = canvasWidth / state.width;
-        const scaleY = canvasHeight / state.height;
-
-        const rowGap = state.rowGap * scaleY;
-        const colGap = state.colGap * scaleX;
-        const padTop = state.padTop * scaleY;
-        const padRight = state.padRight * scaleX;
-        const padBottom = state.padBottom * scaleY;
-        const padLeft = state.padLeft * scaleX;
-        const radius = state.radius * Math.min(scaleX, scaleY);
-
-        const availableW = canvasWidth - (padLeft + padRight) - (colGap * (config.cols - 1));
-        const availableH = canvasHeight - (padTop + padBottom) - (rowGap * (config.rows - 1));
-
-        const cellW = availableW / config.cols;
-        const cellH = availableH / config.rows;
-
-        let loadedCount = 0;
-        const totalSlots = state.slots.length;
-
-        state.slots.forEach((slotData, idx) => {
-          const col = idx % config.cols;
-          const row = Math.floor(idx / config.cols);
-
-          const cellX = padLeft + col * (cellW + colGap);
-          const cellY = padTop + row * (cellH + rowGap);
-
-          ctx.save();
-          drawRoundedRect(ctx, cellX, cellY, cellW, cellH, radius);
-          ctx.clip();
-
-          if (slotData.url) {
-            const drawImageOnCanvas = (imageObj) => {
-              ctx.save();
-              ctx.translate(cellX + cellW / 2, cellY + cellH / 2);
-
-              ctx.translate(slotData.panX * scaleX, slotData.panY * scaleY);
-              ctx.rotate((slotData.rotation * Math.PI) / 180);
-              ctx.scale(slotData.flipH ? -1 : 1, 1);
-              ctx.scale(slotData.zoom, slotData.zoom);
-
-              const imgAspect = imageObj.naturalWidth / imageObj.naturalHeight;
-              const cellAspect = cellW / cellH;
-
-              let renderW, renderH;
-              const fitMode = slotData.fitMode || 'fill';
-
-              const targetAspect = (config && config.slotAspect) ? config.slotAspect : cellAspect;
-
-              if (fitMode === 'contain') {
-                if (imgAspect > targetAspect) {
-                  renderW = cellW;
-                  renderH = cellW / imgAspect;
-                } else {
-                  renderH = cellH;
-                  renderW = cellH * imgAspect;
+              const getPos = (e) => {
+                if (e.touches && e.touches.length > 0) {
+                  return { x: e.touches[0].clientX, y: e.touches[0].clientY };
                 }
-              } else if (fitMode === 'cover') {
-                if (imgAspect > targetAspect) {
-                  renderH = cellH;
-                  renderW = cellH * imgAspect;
-                } else {
-                  renderW = cellW;
-                  renderH = cellW / imgAspect;
-                }
-              } else { // Fill cell exact
-                renderW = cellW;
-                renderH = cellH;
-              }
-
-              ctx.drawImage(imageObj, -renderW / 2, -renderH / 2, renderW, renderH);
-              ctx.restore();
-
-              loadedCount++;
-              if (loadedCount === totalSlots && callback) callback();
-            };
-
-            if (slotData.img && slotData.img.complete) {
-              drawImageOnCanvas(slotData.img);
-            } else {
-              const img = new Image();
-              if (slotData.url && (slotData.url.startsWith('http://') || slotData.url.startsWith('https://'))) {
-                img.crossOrigin = 'anonymous';
-              }
-              img.onload = () => drawImageOnCanvas(img);
-              img.onerror = () => {
-                loadedCount++;
-                if (loadedCount === totalSlots && callback) callback();
+                return { x: e.clientX, y: e.clientY };
               };
-              img.src = slotData.url;
+
+              handles.forEach(handle => {
+                const onStart = (e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+
+                  activeHandle = handle.dataset.handle;
+                  handle.classList.add('dragging');
+                  const pos = getPos(e);
+                  startX = pos.x;
+                  startY = pos.y;
+                  startW = state.width;
+                  startH = state.height;
+
+                  document.addEventListener('mousemove', onMove, { passive: false });
+                  document.addEventListener('mouseup', onEnd);
+                  document.addEventListener('touchmove', onMove, { passive: false });
+                  document.addEventListener('touchend', onEnd);
+                };
+
+                handle.addEventListener('mousedown', onStart);
+                handle.addEventListener('touchstart', onStart, { passive: false });
+              });
+
+              function onMove(e) {
+                if (!activeHandle) return;
+                e.preventDefault();
+                const pos = getPos(e);
+                const scaleFactor = currentFitScale || 1;
+                const dx = (pos.x - startX) / scaleFactor;
+                const dy = (pos.y - startY) / scaleFactor;
+
+                let newW = startW;
+                let newH = startH;
+
+                if (activeHandle.includes('right')) newW = startW + dx;
+                if (activeHandle.includes('left')) newW = startW - dx;
+                if (activeHandle.includes('bottom')) newH = startH + dy;
+                if (activeHandle.includes('top')) newH = startH - dy;
+
+                // Minimum dimensions constraint
+                state.width = Math.max(260, Math.min(2400, newW));
+                state.height = Math.max(260, Math.min(2400, newH));
+
+                updateFrameStyles();
+              }
+
+              function onEnd() {
+                if (activeHandle) {
+                  const el = resizableWrapper.querySelector(`[data-handle="${activeHandle}"]`);
+                  if (el) el.classList.remove('dragging');
+                }
+                activeHandle = null;
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('mouseup', onEnd);
+                document.removeEventListener('touchmove', onMove);
+                document.removeEventListener('touchend', onEnd);
+              }
             }
-          } else {
-            ctx.fillStyle = '#1e293b';
-            ctx.fillRect(cellX, cellY, cellW, cellH);
-            loadedCount++;
-            if (loadedCount === totalSlots && callback) callback();
-          }
 
-          ctx.restore();
-        });
-      }
+            // Update Dynamic CSS Variables & Dimension Tooltip & Mobile Viewport Scale
+            function updateFrameStyles() {
+              const workspaceEl = document.querySelector('.canvas-workspace');
+              const scaleContainer = document.getElementById('canvas-scale-container');
 
-      function drawRoundedRect(ctx, x, y, width, height, radius) {
-        ctx.beginPath();
-        ctx.moveTo(x + radius, y);
-        ctx.lineTo(x + width - radius, y);
-        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-        ctx.lineTo(x + width, y + height - radius);
-        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-        ctx.lineTo(x + radius, y + height);
-        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-        ctx.lineTo(x, y + radius);
-        ctx.quadraticCurveTo(x, y, x + radius, y);
-        ctx.closePath();
-      }
+              if (workspaceEl && scaleContainer && resizableWrapper) {
+                const isMobile = window.innerWidth <= 768;
+                const paddingX = isMobile ? 24 : 48;
+                const paddingY = isMobile ? 32 : 48;
 
-      function downloadCollageImage() {
-        renderExportCanvasPreview(() => {
-          const mimeType = state.exportFormat === 'jpeg' ? 'image/jpeg' : (state.exportFormat === 'webp' ? 'image/webp' : 'image/png');
-          const filename = `gridsnap-interactive-collage-${Date.now()}.${state.exportFormat}`;
+                const availW = Math.max(120, workspaceEl.clientWidth - paddingX);
+                const availH = isMobile
+                  ? Math.max(200, Math.min(window.innerHeight * 0.5, workspaceEl.clientHeight - paddingY))
+                  : Math.max(150, workspaceEl.clientHeight - paddingY);
 
-          offscreenCanvas.toBlob((blob) => {
-            const link = document.createElement('a');
-            link.download = filename;
-            link.href = URL.createObjectURL(blob);
-            link.click();
-            setTimeout(() => URL.revokeObjectURL(link.href), 2000);
-            exportModal.classList.add('hidden');
-          }, mimeType, 0.98);
-        });
-      }
+                if (availW > 0 && availH > 0 && (state.width > availW || state.height > availH)) {
+                  currentFitScale = Math.min(availW / state.width, availH / state.height, 1);
+                } else {
+                  currentFitScale = 1;
+                }
 
-      // Native Web Share API Functionality (Mobile WhatsApp, Instagram, System Share)
-      function shareCollageImage() {
-        renderExportCanvasPreview(() => {
-          const mimeType = state.exportFormat === 'jpeg' ? 'image/jpeg' : (state.exportFormat === 'webp' ? 'image/webp' : 'image/png');
-          const filename = `gridsnap-collage-${Date.now()}.${state.exportFormat}`;
+                const scaledW = state.width * currentFitScale;
+                const scaledH = state.height * currentFitScale;
 
-          offscreenCanvas.toBlob((blob) => {
-            if (!blob) return;
+                scaleContainer.style.width = `${scaledW}px`;
+                scaleContainer.style.height = `${scaledH}px`;
 
-            const file = new File([blob], filename, { type: mimeType });
+                resizableWrapper.style.width = `${state.width}px`;
+                resizableWrapper.style.height = `${state.height}px`;
+                resizableWrapper.style.transform = `scale(${currentFitScale})`;
+                resizableWrapper.style.transformOrigin = 'top left';
+              }
 
-            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-              navigator.share({
-                title: 'My Photo Collage',
-                text: 'Created with GridSnap Collage Studio',
-                files: [file]
-              }).catch(err => {
-                if (err.name !== 'AbortError') {
-                  downloadCollageImage();
+              collageFrame.style.setProperty('--row-gap', `${state.rowGap}px`);
+              collageFrame.style.setProperty('--col-gap', `${state.colGap}px`);
+              collageFrame.style.setProperty('--pad-top', `${state.padTop}px`);
+              collageFrame.style.setProperty('--pad-right', `${state.padRight}px`);
+              collageFrame.style.setProperty('--pad-bottom', `${state.padBottom}px`);
+              collageFrame.style.setProperty('--pad-left', `${state.padLeft}px`);
+              collageFrame.style.setProperty('--border-radius', `${state.radius}px`);
+              collageFrame.style.setProperty('--bg-color', state.bgColor);
+
+              const config = GRID_CONFIGS[state.currentGrid];
+              const dimensionTooltip = document.getElementById('dimension-tooltip');
+
+              if (dimensionTooltip) {
+                if (config && (config.slotAspect || state.currentGrid === '2x4' || state.currentGrid === '5x6' || state.currentGrid === '6x7')) {
+                  const widthCm = (state.width / 28.3465).toFixed(1);
+                  const heightCm = (state.height / 28.3465).toFixed(1);
+                  dimensionTooltip.innerHTML = `Width: <span>${widthCm} cm</span> | Height: <span>${heightCm} cm</span> <span style="opacity:0.75; margin-left:6px;">(Photo: 3.5 × 4.5 cm)</span>`;
+                } else {
+                  dimensionTooltip.innerHTML = `Width: <span id="dim-w">${Math.round(state.width)}</span>px | Height: <span id="dim-h">${Math.round(state.height)}</span>px`;
+                }
+              }
+
+              rowGapVal.textContent = `${state.rowGap}px`;
+              colGapVal.textContent = `${state.colGap}px`;
+              padTopVal.textContent = `${state.padTop}px`;
+              padRightVal.textContent = `${state.padRight}px`;
+              padBottomVal.textContent = `${state.padBottom}px`;
+              padLeftVal.textContent = `${state.padLeft}px`;
+              radiusVal.textContent = `${state.radius}px`;
+
+              inputRowGap.value = state.rowGap;
+              inputColGap.value = state.colGap;
+              inputPadTop.value = state.padTop;
+              inputPadRight.value = state.padRight;
+              inputPadBottom.value = state.padBottom;
+              inputPadLeft.value = state.padLeft;
+              inputRadius.value = state.radius;
+            }
+
+            function switchTab(tabId) {
+              tabBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tabId));
+              tabPanels.forEach(panel => panel.classList.toggle('active', panel.id === tabId));
+            }
+
+            // Setup Event Listeners
+            function setupEventListeners() {
+              tabBtns.forEach(btn => btn.addEventListener('click', () => {
+                if (btn.id === 'btn-toggle-sidebar-collapse') return;
+                if (sidebarDrawer && sidebarDrawer.classList.contains('compact-mode')) {
+                  sidebarDrawer.classList.remove('compact-mode');
+                  const labelSpan = btnToggleSidebarCollapse ? btnToggleSidebarCollapse.querySelector('.btn-collapse-label') : null;
+                  if (labelSpan) labelSpan.textContent = 'Compact';
+                  setTimeout(updateFrameStyles, 300);
+                }
+                switchTab(btn.dataset.tab);
+              }));
+              presetCards.forEach(card => card.addEventListener('click', () => setGridFormat(card.dataset.grid)));
+
+              const globalFitBtns = document.querySelectorAll('#global-fit-mode-group .pill-btn');
+              globalFitBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                  globalFitBtns.forEach(b => b.classList.remove('active'));
+                  btn.classList.add('active');
+                  state.globalFitMode = btn.dataset.fit;
+                  state.slots.forEach(slot => {
+                    if (slot) slot.fitMode = btn.dataset.fit;
+                  });
+                  renderGridSlots();
+                });
+              });
+
+              pillAspectBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                  pillAspectBtns.forEach(b => b.classList.remove('active'));
+                  btn.classList.add('active');
+
+                  const aspectStr = btn.dataset.aspect;
+                  state.aspectRatio = aspectStr;
+                  const [aw, ah] = aspectStr.split('/').map(Number);
+
+                  // Recalculate frame height based on target aspect ratio
+                  state.height = Math.round(state.width * (ah / aw));
+                  updateFrameStyles();
+                });
+              });
+
+              // 4-Way Padding & Gap Sliders
+              inputRowGap.addEventListener('input', (e) => { state.rowGap = parseInt(e.target.value, 10); updateFrameStyles(); });
+              inputColGap.addEventListener('input', (e) => { state.colGap = parseInt(e.target.value, 10); updateFrameStyles(); });
+
+              inputPadTop.addEventListener('input', (e) => { state.padTop = parseInt(e.target.value, 10); updateFrameStyles(); });
+              inputPadRight.addEventListener('input', (e) => { state.padRight = parseInt(e.target.value, 10); updateFrameStyles(); });
+              inputPadBottom.addEventListener('input', (e) => { state.padBottom = parseInt(e.target.value, 10); updateFrameStyles(); });
+              inputPadLeft.addEventListener('input', (e) => { state.padLeft = parseInt(e.target.value, 10); updateFrameStyles(); });
+              inputRadius.addEventListener('input', (e) => { state.radius = parseInt(e.target.value, 10); updateFrameStyles(); });
+
+              btnDuplicateHeader.addEventListener('click', triggerPassportMode);
+              if (btnQuickDownload) btnQuickDownload.addEventListener('click', downloadCollageImage);
+
+              btnDuplicateToAll.addEventListener('click', () => {
+                const idx = state.selectedSlotIndex !== null ? state.selectedSlotIndex : 0;
+                duplicateToAllSlots(idx);
+              });
+
+              colorSwatches.forEach(swatch => {
+                swatch.addEventListener('click', () => {
+                  colorSwatches.forEach(s => s.classList.remove('active'));
+                  swatch.classList.add('active');
+                  state.bgColor = swatch.dataset.color;
+                  inputBgColor.value = swatch.dataset.color === 'transparent' ? '#ffffff' : swatch.dataset.color;
+                  hexColorText.textContent = swatch.dataset.color;
+                  updateFrameStyles();
+                });
+              });
+
+              inputBgColor.addEventListener('input', (e) => {
+                state.bgColor = e.target.value;
+                hexColorText.textContent = e.target.value;
+                colorSwatches.forEach(s => s.classList.remove('active'));
+                updateFrameStyles();
+              });
+
+              batchUploadInput.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files.length > 0) {
+                  handleBatchFiles(Array.from(e.target.files), 0, false);
+                  e.target.value = '';
                 }
               });
-            } else {
-              downloadCollageImage();
-            }
-          }, mimeType, 0.98);
-        });
-      }
 
-      init();
-    });
-  </script>
+              slotReplaceInput.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files.length > 0) {
+                  const idx = state.selectedSlotIndex !== null ? state.selectedSlotIndex : 0;
+                  handleBatchFiles(Array.from(e.target.files), idx, true);
+                  e.target.value = '';
+                }
+              });
+
+              fitModeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                  if (state.selectedSlotIndex !== null && state.slots[state.selectedSlotIndex]) {
+                    fitModeBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    state.slots[state.selectedSlotIndex].fitMode = btn.dataset.fit;
+                    renderGridSlots();
+                  }
+                });
+              });
+
+              btnSamplePhotos.addEventListener('click', loadSamplePhotos);
+
+              inputSlotZoom.addEventListener('input', (e) => {
+                if (state.selectedSlotIndex !== null && state.slots[state.selectedSlotIndex]) {
+                  const z = parseFloat(e.target.value);
+                  state.slots[state.selectedSlotIndex].zoom = z;
+                  slotZoomVal.textContent = `${z.toFixed(2)}x`;
+                  renderGridSlots();
+                }
+              });
+
+              btnRotateSlot.addEventListener('click', () => {
+                if (state.selectedSlotIndex !== null && state.slots[state.selectedSlotIndex]) {
+                  state.slots[state.selectedSlotIndex].rotation = (state.slots[state.selectedSlotIndex].rotation + 90) % 360;
+                  renderGridSlots();
+                }
+              });
+
+              btnFlipHSlot.addEventListener('click', () => {
+                if (state.selectedSlotIndex !== null && state.slots[state.selectedSlotIndex]) {
+                  state.slots[state.selectedSlotIndex].flipH = !state.slots[state.selectedSlotIndex].flipH;
+                  renderGridSlots();
+                }
+              });
+
+              btnResetSlotTransform.addEventListener('click', () => {
+                if (state.selectedSlotIndex !== null && state.slots[state.selectedSlotIndex]) {
+                  state.slots[state.selectedSlotIndex].zoom = 1.0;
+                  state.slots[state.selectedSlotIndex].panX = 0;
+                  state.slots[state.selectedSlotIndex].panY = 0;
+                  state.slots[state.selectedSlotIndex].rotation = 0;
+                  state.slots[state.selectedSlotIndex].flipH = false;
+                  state.slots[state.selectedSlotIndex].fitMode = 'fill';
+                  selectSlot(state.selectedSlotIndex);
+                  renderGridSlots();
+                }
+              });
+
+              btnClearCurrentSlot.addEventListener('click', () => {
+                if (state.selectedSlotIndex !== null) clearSlot(state.selectedSlotIndex);
+              });
+
+              btnOpenExport.addEventListener('click', () => {
+                exportModal.classList.remove('hidden');
+                renderExportCanvasPreview();
+              });
+
+              btnCloseModal.addEventListener('click', () => exportModal.classList.add('hidden'));
+              btnCancelExport.addEventListener('click', () => exportModal.classList.add('hidden'));
+
+              exportFormatBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                  exportFormatBtns.forEach(b => b.classList.remove('active'));
+                  btn.classList.add('active');
+                  state.exportFormat = btn.dataset.format;
+                });
+              });
+
+              exportScaleBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                  exportScaleBtns.forEach(b => b.classList.remove('active'));
+                  btn.classList.add('active');
+                  state.exportScale = btn.dataset.scale;
+                  renderExportCanvasPreview();
+                });
+              });
+
+              btnDownloadNow.addEventListener('click', downloadCollageImage);
+
+              if (btnNativeShare) {
+                btnNativeShare.addEventListener('click', shareCollageImage);
+              }
+
+              window.addEventListener('resize', updateFrameStyles);
+            }
+
+            // Offscreen Canvas Exporter (Calculates exact interactive width, height, 4-sided padding, row/col gaps)
+            function renderExportCanvasPreview(callback) {
+              const config = GRID_CONFIGS[state.currentGrid];
+
+              let canvasWidth, canvasHeight;
+              if (state.exportScale === 'a4') {
+                if (state.width <= state.height) {
+                  canvasWidth = 2480;
+                  canvasHeight = 3508;
+                } else {
+                  canvasWidth = 3508;
+                  canvasHeight = 2480;
+                }
+              } else {
+                const mult = parseInt(state.exportScale, 10) || 2;
+                canvasWidth = Math.round(state.width * mult);
+                canvasHeight = Math.round(state.height * mult);
+              }
+
+              offscreenCanvas.width = canvasWidth;
+              offscreenCanvas.height = canvasHeight;
+
+              const ctx = offscreenCanvas.getContext('2d');
+              ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+              // Draw Background
+              if (state.bgColor !== 'transparent') {
+                ctx.fillStyle = state.bgColor;
+                ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+              }
+
+              const scaleX = canvasWidth / state.width;
+              const scaleY = canvasHeight / state.height;
+
+              const rowGap = state.rowGap * scaleY;
+              const colGap = state.colGap * scaleX;
+              const padTop = state.padTop * scaleY;
+              const padRight = state.padRight * scaleX;
+              const padBottom = state.padBottom * scaleY;
+              const padLeft = state.padLeft * scaleX;
+              const radius = state.radius * Math.min(scaleX, scaleY);
+
+              const availableW = canvasWidth - (padLeft + padRight) - (colGap * (config.cols - 1));
+              const availableH = canvasHeight - (padTop + padBottom) - (rowGap * (config.rows - 1));
+
+              const cellW = availableW / config.cols;
+              const cellH = availableH / config.rows;
+
+              let loadedCount = 0;
+              const totalSlots = state.slots.length;
+
+              state.slots.forEach((slotData, idx) => {
+                const col = idx % config.cols;
+                const row = Math.floor(idx / config.cols);
+
+                const cellX = padLeft + col * (cellW + colGap);
+                const cellY = padTop + row * (cellH + rowGap);
+
+                ctx.save();
+                drawRoundedRect(ctx, cellX, cellY, cellW, cellH, radius);
+                ctx.clip();
+
+                if (slotData.url) {
+                  const drawImageOnCanvas = (imageObj) => {
+                    ctx.save();
+                    ctx.translate(cellX + cellW / 2, cellY + cellH / 2);
+
+                    ctx.translate(slotData.panX * scaleX, slotData.panY * scaleY);
+                    ctx.rotate((slotData.rotation * Math.PI) / 180);
+                    ctx.scale(slotData.flipH ? -1 : 1, 1);
+                    ctx.scale(slotData.zoom, slotData.zoom);
+
+                    const imgAspect = imageObj.naturalWidth / imageObj.naturalHeight;
+                    const cellAspect = cellW / cellH;
+
+                    let renderW, renderH;
+                    const fitMode = slotData.fitMode || 'fill';
+
+                    const targetAspect = (config && config.slotAspect) ? config.slotAspect : cellAspect;
+
+                    if (fitMode === 'contain') {
+                      if (imgAspect > targetAspect) {
+                        renderW = cellW;
+                        renderH = cellW / imgAspect;
+                      } else {
+                        renderH = cellH;
+                        renderW = cellH * imgAspect;
+                      }
+                    } else if (fitMode === 'cover') {
+                      if (imgAspect > targetAspect) {
+                        renderH = cellH;
+                        renderW = cellH * imgAspect;
+                      } else {
+                        renderW = cellW;
+                        renderH = cellW / imgAspect;
+                      }
+                    } else { // Fill cell exact
+                      renderW = cellW;
+                      renderH = cellH;
+                    }
+
+                    ctx.drawImage(imageObj, -renderW / 2, -renderH / 2, renderW, renderH);
+                    ctx.restore();
+
+                    loadedCount++;
+                    if (loadedCount === totalSlots && callback) callback();
+                  };
+
+                  if (slotData.img && slotData.img.complete) {
+                    drawImageOnCanvas(slotData.img);
+                  } else {
+                    const img = new Image();
+                    if (slotData.url && (slotData.url.startsWith('http://') || slotData.url.startsWith('https://'))) {
+                      img.crossOrigin = 'anonymous';
+                    }
+                    img.onload = () => drawImageOnCanvas(img);
+                    img.onerror = () => {
+                      loadedCount++;
+                      if (loadedCount === totalSlots && callback) callback();
+                    };
+                    img.src = slotData.url;
+                  }
+                } else {
+                  ctx.fillStyle = '#1e293b';
+                  ctx.fillRect(cellX, cellY, cellW, cellH);
+                  loadedCount++;
+                  if (loadedCount === totalSlots && callback) callback();
+                }
+
+                ctx.restore();
+              });
+            }
+
+            function drawRoundedRect(ctx, x, y, width, height, radius) {
+              ctx.beginPath();
+              ctx.moveTo(x + radius, y);
+              ctx.lineTo(x + width - radius, y);
+              ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+              ctx.lineTo(x + width, y + height - radius);
+              ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+              ctx.lineTo(x + radius, y + height);
+              ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+              ctx.lineTo(x, y + radius);
+              ctx.quadraticCurveTo(x, y, x + radius, y);
+              ctx.closePath();
+            }
+
+            function downloadCollageImage() {
+              renderExportCanvasPreview(() => {
+                const mimeType = state.exportFormat === 'jpeg' ? 'image/jpeg' : (state.exportFormat === 'webp' ? 'image/webp' : 'image/png');
+                const filename = `gridsnap-interactive-collage-${Date.now()}.${state.exportFormat}`;
+
+                offscreenCanvas.toBlob((blob) => {
+                  const link = document.createElement('a');
+                  link.download = filename;
+                  link.href = URL.createObjectURL(blob);
+                  link.click();
+                  setTimeout(() => URL.revokeObjectURL(link.href), 2000);
+                  exportModal.classList.add('hidden');
+                }, mimeType, 0.98);
+              });
+            }
+
+            // Native Web Share API Functionality (Mobile WhatsApp, Instagram, System Share)
+            function shareCollageImage() {
+              renderExportCanvasPreview(() => {
+                const mimeType = state.exportFormat === 'jpeg' ? 'image/jpeg' : (state.exportFormat === 'webp' ? 'image/webp' : 'image/png');
+                const filename = `gridsnap-collage-${Date.now()}.${state.exportFormat}`;
+
+                offscreenCanvas.toBlob((blob) => {
+                  if (!blob) return;
+
+                  const file = new File([blob], filename, { type: mimeType });
+
+                  if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                    navigator.share({
+                      title: 'My Photo Collage',
+                      text: 'Created with GridSnap Collage Studio',
+                      files: [file]
+                    }).catch(err => {
+                      if (err.name !== 'AbortError') {
+                        downloadCollageImage();
+                      }
+                    });
+                  } else {
+                    downloadCollageImage();
+                  }
+                }, mimeType, 0.98);
+              });
+            }
+
+            init();
+          });
+        </script>
 </body>
+
 </html>
