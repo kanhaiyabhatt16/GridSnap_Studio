@@ -979,14 +979,32 @@
       border-radius: 4px;
     }
 
-    .modal-footer {
-      padding: 16px 24px;
-      border-top: 1px solid var(--border-color);
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 12px;
-      background-color: rgba(11, 15, 25, 0.4);
+    .preset-label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.3;
+    }
+
+    /* Responsive Layout Adjustments */
+    @media (max-width: 840px) {
+      .workspace-layout {
+        flex-direction: column-reverse;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: 340px;
+      }
+
+      .canvas-workspace {
+        padding: 12px;
+        flex: 1;
+      }
+
+      .tagline {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -1453,6 +1471,18 @@
 
         <div class="modal-footer">
           <button id="btn-cancel-export" class="btn btn-ghost">Cancel</button>
+          
+          <button id="btn-native-share" class="btn btn-share btn-large" title="Share via WhatsApp, Instagram, or System Share">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="18" cy="5" r="3"/>
+              <circle cx="6" cy="12" r="3"/>
+              <circle cx="18" cy="19" r="3"/>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+            <span>Share Collage</span>
+          </button>
+
           <button id="btn-download-now" class="btn btn-primary btn-large">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -1461,9 +1491,6 @@
             </svg>
             <span>Download Image</span>
           </button>
-        </div>
-      </div>
-    </div>
   </div>
 
   <!-- JavaScript Engine -->
@@ -1559,6 +1586,20 @@
       const exportModal = document.getElementById('export-modal');
       const btnCloseModal = document.getElementById('btn-close-modal');
       const btnCancelExport = document.getElementById('btn-cancel-export');
+      const btnNativeShare = document.getElementById('btn-native-share');
+      
+      const sidebarDrawer = document.getElementById('sidebar-drawer');
+      const btnToggleMobileDrawer = document.getElementById('btn-toggle-mobile-drawer');
+      const btnCloseMobileDrawer = document.getElementById('btn-close-mobile-drawer');
+      const mobileNavBtns = document.querySelectorAll('.mobile-nav-btn');
+      const mbNavExport = document.getElementById('mb-nav-export');
+
+      // Helper for Haptic Feedback on Touch Devices
+      function triggerHaptic(duration = 10) {
+        if ('vibrate' in navigator) {
+          try { navigator.vibrate(duration); } catch(e) {}
+        }
+      }
       const btnDownloadNow = document.getElementById('btn-download-now');
       const exportFormatBtns = document.querySelectorAll('#export-format-group .pill-btn');
       const exportScaleBtns = document.querySelectorAll('#export-scale-group .pill-btn');
@@ -1713,11 +1754,13 @@
         return `translate(${slotData.panX}px, ${slotData.panY}px) scale(${slotData.zoom}) rotate(${slotData.rotation}deg) scaleX(${slotData.flipH ? -1 : 1})`;
       }
 
-      // Image Panning inside Slot (Mouse + Touch Support)
+      // Image Panning & 2-Finger Touch Pinch Zoom inside Slot
       function setupImagePanEvents(imgEl, index) {
         let isDragging = false;
         let startX = 0, startY = 0;
         let initialPanX = 0, initialPanY = 0;
+        let initialPinchDist = 0;
+        let initialZoom = 1.0;
 
         imgEl.setAttribute('draggable', 'false');
 
@@ -1728,9 +1771,22 @@
           return { x: e.clientX, y: e.clientY };
         };
 
+        const getTouchDistance = (e) => {
+          if (e.touches && e.touches.length >= 2) {
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            return Math.hypot(dx, dy);
+          }
+          return 0;
+        };
+
         const onStart = (e) => {
-          e.preventDefault();
-          e.stopPropagation();
+          // Allow multi-touch pinch to scale
+          if (e.touches && e.touches.length > 1) {
+            initialPinchDist = getTouchDistance(e);
+            initialZoom = state.slots[index].zoom;
+          }
+
           isDragging = true;
           const pos = getPos(e);
           startX = pos.x;
@@ -1748,14 +1804,34 @@
         const onMove = (e) => {
           if (!isDragging) return;
           e.preventDefault();
+
+          // Handle 2-Finger Touch Pinch Zoom
+          if (e.touches && e.touches.length === 2 && initialPinchDist > 0) {
+            const currentDist = getTouchDistance(e);
+            if (currentDist > 0) {
+              const scaleRatio = currentDist / initialPinchDist;
+              const newZoom = Math.max(0.5, Math.min(4.0, initialZoom * scaleRatio));
+              state.slots[index].zoom = newZoom;
+              imgEl.style.transform = getTransformCSS(state.slots[index]);
+              if (state.selectedSlotIndex === index && inputSlotZoom) {
+                inputSlotZoom.value = newZoom;
+                if (slotZoomVal) slotZoomVal.textContent = `${newZoom.toFixed(2)}x`;
+              }
+            }
+            return;
+          }
+
+          // Handle 1-Finger Touch or Mouse Panning
           const pos = getPos(e);
           state.slots[index].panX = initialPanX + (pos.x - startX);
           state.slots[index].panY = initialPanY + (pos.y - startY);
           imgEl.style.transform = getTransformCSS(state.slots[index]);
         };
 
-        const onEnd = () => {
+        const onEnd = (e) => {
+          if (e.touches && e.touches.length > 0) return; // Still tracking other fingers
           isDragging = false;
+          initialPinchDist = 0;
           document.removeEventListener('mousemove', onMove);
           document.removeEventListener('mouseup', onEnd);
           document.removeEventListener('touchmove', onMove);
@@ -2132,10 +2208,25 @@
         }
       }
 
-      // Update Dynamic CSS Variables & Dimension Tooltip
+      // Update Dynamic CSS Variables & Dimension Tooltip & Mobile Viewport Scale
       function updateFrameStyles() {
         resizableWrapper.style.width = `${state.width}px`;
         resizableWrapper.style.height = `${state.height}px`;
+
+        // Mobile Canvas Auto-Scaling: Ensures full frame + 8 handles fit cleanly inside small screens
+        const workspaceEl = document.querySelector('.canvas-workspace');
+        if (workspaceEl) {
+          const availW = workspaceEl.clientWidth - (window.innerWidth <= 768 ? 20 : 40);
+          const availH = workspaceEl.clientHeight - (window.innerWidth <= 768 ? 20 : 40);
+
+          if (availW > 0 && availH > 0 && (state.width > availW || state.height > availH)) {
+            const fitScale = Math.min(availW / state.width, availH / state.height, 1);
+            resizableWrapper.style.transform = `scale(${fitScale})`;
+            resizableWrapper.style.transformOrigin = 'center center';
+          } else {
+            resizableWrapper.style.transform = 'none';
+          }
+        }
 
         collageFrame.style.setProperty('--row-gap', `${state.rowGap}px`);
         collageFrame.style.setProperty('--col-gap', `${state.colGap}px`);
@@ -2151,12 +2242,10 @@
 
         if (dimensionTooltip) {
           if (config && (config.slotAspect || state.currentGrid === '2x4' || state.currentGrid === '5x6' || state.currentGrid === '6x7')) {
-            // For 8, 30, and 42 photo passport sheets: Remove PX completely, display in CM!
             const widthCm = (state.width / 28.3465).toFixed(1);
             const heightCm = (state.height / 28.3465).toFixed(1);
             dimensionTooltip.innerHTML = `Width: <span>${widthCm} cm</span> | Height: <span>${heightCm} cm</span> <span style="opacity:0.75; margin-left:6px;">(Photo: 3.5 × 4.5 cm)</span>`;
           } else {
-            // For all other normal grids: Keep standard PX display as requested!
             dimensionTooltip.innerHTML = `Width: <span id="dim-w">${Math.round(state.width)}</span>px | Height: <span id="dim-h">${Math.round(state.height)}</span>px`;
           }
         }
@@ -2185,7 +2274,16 @@
 
       // Setup Event Listeners
       function setupEventListeners() {
-        tabBtns.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
+        tabBtns.forEach(btn => btn.addEventListener('click', () => {
+          if (btn.id === 'btn-toggle-sidebar-collapse') return;
+          if (sidebarDrawer && sidebarDrawer.classList.contains('compact-mode')) {
+            sidebarDrawer.classList.remove('compact-mode');
+            const labelSpan = btnToggleSidebarCollapse ? btnToggleSidebarCollapse.querySelector('.btn-collapse-label') : null;
+            if (labelSpan) labelSpan.textContent = 'Compact';
+            setTimeout(updateFrameStyles, 300);
+          }
+          switchTab(btn.dataset.tab);
+        }));
         presetCards.forEach(card => card.addEventListener('click', () => setGridFormat(card.dataset.grid)));
 
         const globalFitBtns = document.querySelectorAll('#global-fit-mode-group .pill-btn');
@@ -2346,6 +2444,12 @@
         });
 
         btnDownloadNow.addEventListener('click', downloadCollageImage);
+
+        if (btnNativeShare) {
+          btnNativeShare.addEventListener('click', shareCollageImage);
+        }
+
+        window.addEventListener('resize', updateFrameStyles);
       }
 
       // Offscreen Canvas Exporter (Calculates exact interactive width, height, 4-sided padding, row/col gaps)
@@ -2507,6 +2611,34 @@
             link.click();
             setTimeout(() => URL.revokeObjectURL(link.href), 2000);
             exportModal.classList.add('hidden');
+          }, mimeType, 0.98);
+        });
+      }
+
+      // Native Web Share API Functionality (Mobile WhatsApp, Instagram, System Share)
+      function shareCollageImage() {
+        renderExportCanvasPreview(() => {
+          const mimeType = state.exportFormat === 'jpeg' ? 'image/jpeg' : (state.exportFormat === 'webp' ? 'image/webp' : 'image/png');
+          const filename = `gridsnap-collage-${Date.now()}.${state.exportFormat}`;
+
+          offscreenCanvas.toBlob((blob) => {
+            if (!blob) return;
+
+            const file = new File([blob], filename, { type: mimeType });
+
+            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+              navigator.share({
+                title: 'My Photo Collage',
+                text: 'Created with GridSnap Collage Studio',
+                files: [file]
+              }).catch(err => {
+                if (err.name !== 'AbortError') {
+                  downloadCollageImage();
+                }
+              });
+            } else {
+              downloadCollageImage();
+            }
           }, mimeType, 0.98);
         });
       }
