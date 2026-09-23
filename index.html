@@ -1227,8 +1227,6 @@
 
       .sidebar {
         width: 100%;
-        height: 320px;
-        max-height: 48vh;
         background-color: var(--bg-surface);
         border-top: 1px solid var(--border-color);
         border-right: none;
@@ -1237,6 +1235,25 @@
         flex-shrink: 0;
         z-index: 30;
         box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.4);
+        transition: height 0.3s cubic-bezier(0.16, 1, 0.3, 1), max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .sidebar.mobile-collapsed {
+        height: 50px !important;
+        max-height: 50px !important;
+      }
+
+      .sidebar.mobile-collapsed .tab-contents {
+        display: none !important;
+      }
+
+      .sidebar.mobile-expanded {
+        height: 330px !important;
+        max-height: 48vh !important;
+      }
+
+      .sidebar.mobile-expanded .tab-contents {
+        display: flex !important;
       }
 
       .sidebar-tabs {
@@ -2604,16 +2621,48 @@
 
             // Setup Event Listeners
             function setupEventListeners() {
-              tabBtns.forEach(btn => btn.addEventListener('click', () => {
+              const sidebarEl = document.querySelector('.sidebar');
+              const canvasWorkspaceEl = document.querySelector('.canvas-workspace');
+
+              if (window.innerWidth <= 840 && sidebarEl) {
+                sidebarEl.classList.add('mobile-collapsed');
+                sidebarEl.classList.remove('mobile-expanded');
+              }
+
+              tabBtns.forEach(btn => btn.addEventListener('click', (e) => {
                 if (btn.id === 'btn-toggle-sidebar-collapse') return;
-                if (sidebarDrawer && sidebarDrawer.classList.contains('compact-mode')) {
-                  sidebarDrawer.classList.remove('compact-mode');
-                  const labelSpan = btnToggleSidebarCollapse ? btnToggleSidebarCollapse.querySelector('.btn-collapse-label') : null;
-                  if (labelSpan) labelSpan.textContent = 'Compact';
-                  setTimeout(updateFrameStyles, 300);
+                const isMobile = window.innerWidth <= 840;
+                const targetTab = btn.dataset.tab;
+                const isActive = btn.classList.contains('active');
+
+                if (isMobile && sidebarEl) {
+                  if (sidebarEl.classList.contains('mobile-expanded') && isActive) {
+                    sidebarEl.classList.remove('mobile-expanded');
+                    sidebarEl.classList.add('mobile-collapsed');
+                    setTimeout(updateFrameStyles, 320);
+                    return;
+                  } else {
+                    sidebarEl.classList.remove('mobile-collapsed');
+                    sidebarEl.classList.add('mobile-expanded');
+                  }
                 }
-                switchTab(btn.dataset.tab);
+
+                switchTab(targetTab);
+                if (isMobile) {
+                  setTimeout(updateFrameStyles, 320);
+                }
               }));
+
+              if (canvasWorkspaceEl) {
+                canvasWorkspaceEl.addEventListener('click', (e) => {
+                  if (window.innerWidth <= 840 && sidebarEl && sidebarEl.classList.contains('mobile-expanded')) {
+                    if (e.target.classList.contains('handle') || e.target.closest('.handle')) return;
+                    sidebarEl.classList.remove('mobile-expanded');
+                    sidebarEl.classList.add('mobile-collapsed');
+                    setTimeout(updateFrameStyles, 320);
+                  }
+                });
+              }
               presetCards.forEach(card => card.addEventListener('click', () => setGridFormat(card.dataset.grid)));
 
               const globalFitBtns = document.querySelectorAll('#global-fit-mode-group .pill-btn');
