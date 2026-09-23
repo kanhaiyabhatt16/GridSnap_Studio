@@ -39,13 +39,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnClearAll = document.getElementById('btn-clear-all');
   const btnDuplicateHeader = document.getElementById('btn-duplicate-all-header');
   const btnQuickDownload = document.getElementById('btn-quick-download');
-  
+
   // Sidebar Controls
   const tabBtns = document.querySelectorAll('.tab-btn');
   const tabPanels = document.querySelectorAll('.tab-panel');
   const presetCards = document.querySelectorAll('.preset-card');
   const pillAspectBtns = document.querySelectorAll('#aspect-ratio-group .pill-btn');
-  
+
   const inputGap = document.getElementById('input-gap');
   const gapVal = document.getElementById('gap-val');
   const inputRadius = document.getElementById('input-radius');
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnGapZero = document.getElementById('btn-gap-zero');
   const btnGapCompact = document.getElementById('btn-gap-compact');
   const btnGapStandard = document.getElementById('btn-gap-standard');
-  
+
   const colorSwatches = document.querySelectorAll('#color-swatches .swatch');
   const gradientSwatches = document.querySelectorAll('#gradient-swatches .gradient-swatch');
   const inputBgColor = document.getElementById('input-bg-color');
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update CSS Grid Class
     collageFrame.className = `collage-frame grid-${gridKey}`;
-    
+
     // Update Preset Card selection UI
     presetCards.forEach(card => {
       card.classList.toggle('active', card.dataset.grid === gridKey);
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const imgEl = document.createElement('img');
         imgEl.src = slotData.url;
         imgEl.alt = `Slot ${index + 1}`;
-        
+
         const mode = slotData.fitMode || 'fill';
         imgEl.className = mode === 'contain' ? 'fit-contain' : (mode === 'cover' ? 'fit-cover' : 'fit-fill');
         imgEl.style.transform = getTransformCSS(slotData);
@@ -285,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
     imgEl.addEventListener('touchstart', (e) => {
       if (e.touches.length === 1) {
         const touch = e.touches[0];
-        onMouseDown({ clientX: touch.clientX, clientY: touch.clientY, stopPropagation: () => {} });
+        onMouseDown({ clientX: touch.clientX, clientY: touch.clientY, stopPropagation: () => { } });
       }
     });
 
@@ -393,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Duplicate single slot photo across ALL slots (Passport Photo Mode)
   function duplicateToAllSlots(sourceIndex) {
     let sourceSlot = state.slots[sourceIndex];
-    
+
     // If target slot is empty, find first slot with photo
     if (!sourceSlot || !sourceSlot.url) {
       const filledIdx = state.slots.findIndex(s => s.url !== null);
@@ -438,8 +438,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Batch & Single Image Upload Handler
   function handleBatchFiles(files, startSlotIdx = 0, replaceSingleSlot = false) {
     const fileList = Array.from(files);
-    const imageFiles = fileList.filter(f => 
-      (f.type && f.type.startsWith('image/')) || 
+    const imageFiles = fileList.filter(f =>
+      (f.type && f.type.startsWith('image/')) ||
       /\.(jpg|jpeg|png|webp|gif|bmp|svg|jfif|avif)$/i.test(f.name)
     );
     if (imageFiles.length === 0) return;
@@ -619,7 +619,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateFrameStyles() {
     // Calculate dynamic frame width in pixels (380px to 1100px)
     const frameWidthPx = Math.round(380 + ((state.frameScale - 0.5) / 1.3) * (1100 - 380));
-    
+
     collageFrame.style.setProperty('--frame-width', `${frameWidthPx}px`);
     collageFrame.style.setProperty('--grid-gap', `${state.gap}px`);
     collageFrame.style.setProperty('--border-radius', `${state.radius}px`);
@@ -630,7 +630,7 @@ document.addEventListener('DOMContentLoaded', () => {
     gapVal.textContent = `${state.gap}px`;
     radiusVal.textContent = `${state.radius}px`;
     paddingVal.textContent = `${state.padding}px`;
-    
+
     const frameScaleVal = document.getElementById('frame-scale-val');
     if (frameScaleVal) {
       frameScaleVal.textContent = `${frameWidthPx}px`;
@@ -671,7 +671,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnQuickDownload) {
       btnQuickDownload.addEventListener('click', downloadCollageImage);
     }
-    
+
     btnDuplicateToAll.addEventListener('click', () => {
       const idx = state.selectedSlotIndex !== null ? state.selectedSlotIndex : 0;
       duplicateToAllSlots(idx);
@@ -902,7 +902,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // HTML5 Canvas Export Engine (with A4 300 DPI support)
   function renderExportCanvasPreview(callback) {
     const config = GRID_CONFIGS[state.currentGrid];
-    
+
     let canvasWidth, canvasHeight;
     const [aspectW, aspectH] = state.aspectRatio.split('/').map(Number);
 
